@@ -1,0 +1,204 @@
+package itdelatrisu.potato;
+
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+
+import org.newdawn.slick.util.Log;
+import org.newdawn.slick.util.ResourceLoader;
+
+/**
+ * Error handler to log and display errors.
+ */
+public class ErrorHandler {
+	/** Error popup title. */
+	private static final String title = "Error";
+
+	/** Error popup description text. */
+	private static final String
+		desc  = "The game has encountered an error.",
+		descReport = "The game has encountered an error. Please report this!";
+
+	/** Error popup button options. */
+	private static final String[]
+		optionsLog  = {"View Error Log", "Close"},
+		optionsReport = {"Send Report", "Close"},
+		optionsLogReport = {"Send Report", "View Error Log", "Close"};
+
+	/** Text area for Exception. */
+	private static final JTextArea textArea = new JTextArea(7, 30);
+	static {
+		textArea.setEditable(false);
+		textArea.setBackground(UIManager.getColor("Panel.background"));
+		textArea.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		textArea.setTabSize(2);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+	}
+
+	/** Scroll pane holding JTextArea. */
+	private static final JScrollPane scroll = new JScrollPane(textArea);
+
+	/** Error popup objects. */
+	private static final Object[]
+		message  = { desc, scroll },
+		messageReport = { descReport, scroll };
+
+	// This class should not be instantiated.
+	private ErrorHandler() {}
+
+	/**
+	 * Displays an error popup and logs the given error.
+	 * @param error a description of the error
+	 * @param e the exception causing the error
+	 * @param report whether to ask to report the error
+	 */
+	public static void error(String error, Throwable e, boolean report) {
+		if (error == null && e == null)
+			return;
+
+		// log the error
+		if (error == null)
+			Log.error(e);
+		else if (e == null)
+			Log.error(error);
+		else
+			Log.error(error, e);
+
+		// set the textArea to the error message
+		textArea.setText(null);
+		if (error != null) {
+			textArea.append(error);
+			textArea.append("\n");
+		}
+		String trace = null;
+		if (e != null) {
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			trace = sw.toString();
+			textArea.append(trace);
+		}
+
+		// display popup
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			Desktop desktop = null;
+			boolean isBrowseSupported = false, isOpenSupported = false;
+			if (Desktop.isDesktopSupported()) {
+				desktop = Desktop.getDesktop();
+				isBrowseSupported = desktop.isSupported(Desktop.Action.BROWSE);
+				isOpenSupported = desktop.isSupported(Desktop.Action.OPEN);
+			}
+			if (desktop != null && (isOpenSupported || (report && isBrowseSupported))) {  // try to open the log file and/or issues webpage
+				if (report && isBrowseSupported) {  // ask to report the error
+					if (isOpenSupported) {  // also ask to open the log
+						int n = JOptionPane.showOptionDialog(null, messageReport, title,
+								JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+								null, optionsLogReport, optionsLogReport[2]);
+						if (n == 0)
+							desktop.browse(getIssueURI(error, e, trace));
+						else if (n == 1)
+							desktop.open(Options.LOG_FILE);
+					} else {  // only ask to report the error
+						int n = JOptionPane.showOptionDialog(null, message, title,
+								JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+								null, optionsReport, optionsReport[1]);
+						if (n == 0)
+							desktop.browse(getIssueURI(error, e, trace));
+					}
+				} else {  // don't report the error
+					int n = JOptionPane.showOptionDialog(null, message, title,
+							JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+							null, optionsLog, optionsLog[1]);
+					if (n == 0)
+						desktop.open(Options.LOG_FILE);
+				}
+			} else {  // display error only
+				JOptionPane.showMessageDialog(null, report ? messageReport : message,
+						title, JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (Exception e1) {
+			Log.error("An error occurred in the crash popup.", e1);
+		}
+	}
+
+	/**
+	 * Returns the issue reporting URI.
+	 * This will auto-fill the report with the relevant information if possible.
+	 * @param error a description of the error
+	 * @param e the exception causing the error
+	 * @param trace the stack trace
+	 * @return the created URI
+	 */
+	private static URI getIssueURI(String error, Throwable e, String trace) {
+		// generate report information
+		String issueTitle = (error != null) ? error : e.getMessage();
+		StringBuilder sb = new StringBuilder();
+		try {
+			// read version and build date from version file, if possible
+			Properties props = new Properties();
+			props.load(ResourceLoader.getResourceAsStream(Options.VERSION_FILE));
+			String version = props.getProperty("version");
+			if (version != null && !version.equals("${pom.version}")) {
+				sb.append("**Version:** ");
+				sb.append(version);
+				String hash = Utils.getGitHash();
+				if (hash != null) {
+					sb.append(" (");
+					sb.append(hash.substring(0, 12));
+					sb.append(')');
+				}
+				sb.append('\n');
+			}
+			String timestamp = props.getProperty("build.date");
+			if (timestamp != null &&
+			    !timestamp.equals("${maven.build.timestamp}") && !timestamp.equals("${timestamp}")) {
+				sb.append("**Build date:** ");
+				sb.append(timestamp);
+				sb.append('\n');
+			}
+		} catch (IOException e1) {
+			Log.warn("Could not read version file.", e1);
+		}
+		sb.append("**OS:** ");
+		sb.append(System.getProperty("os.name"));
+		sb.append(" (");
+		sb.append(System.getProperty("os.arch"));
+		sb.append(")\n");
+		sb.append("**JRE:** ");
+		sb.append(System.getProperty("java.version"));
+		sb.append('\n');
+		if (error != null) {
+			sb.append("**Error:** `");
+			sb.append(error);
+			sb.append("`\n");
+		}
+		if (trace != null) {
+			sb.append("**Stack trace:**");
+			sb.append("\n```\n");
+			sb.append(trace);
+			sb.append("```");
+		}
+
+		// return auto-filled URI
+		try {
+			return URI.create(String.format(Options.ISSUES_URL,
+					URLEncoder.encode(issueTitle, "UTF-8"),
+					URLEncoder.encode(sb.toString(), "UTF-8")));
+		} catch (UnsupportedEncodingException e1) {
+			Log.warn("URLEncoder failed to encode the auto-filled issue report URL.");
+			return URI.create(String.format(Options.ISSUES_URL, "", ""));
+		}
+	}
+}
