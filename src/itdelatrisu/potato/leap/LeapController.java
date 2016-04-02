@@ -24,15 +24,15 @@ public class LeapController {
 	 * Connects to the Leap Motion controller and starts listening for events.
 	 */
 	public static void init() {
-    	controller = new Controller();         
-        listener = new LeapInput();
-        controller.addListener(listener);
+		controller = new Controller();
+		listener = new LeapInput();
+		controller.addListener(listener);
 
-        // continue listening...
-        try {
-            System.in.read();
-        } catch (IOException e) {}
-        close();
+		// continue listening...
+		try {
+			System.in.read();
+		} catch (IOException e) {}
+		close();
 	}
 
 	/**
