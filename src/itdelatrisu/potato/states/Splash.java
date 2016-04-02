@@ -28,7 +28,7 @@ import itdelatrisu.potato.ui.animations.AnimationEquation;
  */
 public class Splash extends BasicGameState {
 	/** Minimum time, in milliseconds, to display the splash screen (and fade in the logo). */
-	private static final int MIN_SPLASH_TIME = 2000;
+	private static final int MIN_SPLASH_TIME = 1000;
 
 	/** Whether or not loading has completed. */
 	private boolean finished = false;
