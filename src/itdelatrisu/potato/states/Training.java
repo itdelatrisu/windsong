@@ -79,9 +79,9 @@ public class Training extends BasicGameState implements LeapListener {
 		timeToNext -= delta;
 		if (timeToNext < 0) {
 			timeToNext = EVENT_INTERVAL;
-			int pos = (int) ( Math.random()*9 );
-			gp.sendMapObject(pos, 750); // use the constant variable name
-			scoreData.sendMapObject(pos, 750);
+			int pos = (int) (Math.random()*9);
+			gp.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME); // use the constant variable name
+			scoreData.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME);
 		}
 		
 		UI.update(delta);
