@@ -82,6 +82,60 @@ public enum GameImage {
 			return img.getScaledCopy(w, h);
 		}
 	},
+	GAMEPAD_MAP_0 ("gamepad-map-0", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_1 ("gamepad-map-1", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_2 ("gamepad-map-2", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_3 ("gamepad-map-3", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_4 ("gamepad-map-4", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_5 ("gamepad-map-5", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_6 ("gamepad-map-6", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_7 ("gamepad-map-7", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_MAP_8 ("gamepad-map-8", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
 
 	// Game Data
 	COMBO_BURST ("comboburst", "comboburst-%d", "png"),

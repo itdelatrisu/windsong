@@ -45,8 +45,7 @@ public class Gamepad {
 		for (int i = 0; i < GAMEPAD_BUTTONS; i++) {
 			hitImages[i] = GameImage.valueOf(String.format("GAMEPAD_%d", i)).getImage().copy();
 			hitValues[i] = new AnimatedValue(HIT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
-			//TODO
-			//mapObjectImages[i] = GameImage.valueOf(String.format("GAMEPAD_MAP_%d", i)).getImage().copy();
+			mapObjectImages[i] = GameImage.valueOf(String.format("GAMEPAD_MAP_%d", i)).getImage().copy();
 			mapObjectValues[i] = new AnimatedValue(1, 0f, 0f, AnimationEquation.LINEAR);  // dummy
 		}
 	}
@@ -66,9 +65,8 @@ public class Gamepad {
 			}
 			float mapObjectAlpha = mapObjectValues[i].getValue();
 			if (mapObjectAlpha != 0f) {
-				//TODO
-				//mapObjectImages[i].setAlpha(mapObjectAlpha);
-				//mapObjectImages[i].draw();
+				mapObjectImages[i].setAlpha(mapObjectAlpha);
+				mapObjectImages[i].draw();
 			}
 		}
 		Image gamepad = GameImage.GAMEPAD.getImage();
