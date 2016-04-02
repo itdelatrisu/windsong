@@ -10,6 +10,7 @@ import org.newdawn.slick.state.transition.EasedFadeOutTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.potato.App;
+import itdelatrisu.potato.ErrorHandler;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.audio.SoundController;
@@ -17,6 +18,7 @@ import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.map.HitObject;
+import itdelatrisu.potato.map.PotatoMap;
 import itdelatrisu.potato.ui.UI;
 
 /**
@@ -26,8 +28,17 @@ public class Game extends BasicGameState implements LeapListener {
 	/** Time before the music starts, in ms. */
 	private static final int MUSIC_ENTER_TIME = 1000;
 
+	/** Hit object fade-in time. */
+	private static final int HIT_OBJECT_FADEIN_TIME = 375;
+
 	/** Time left the music starts. */
 	private int musicEnterTimer;
+
+	/** The associated map. */
+	private PotatoMap map;
+
+	/** Current hit object index. */
+	private int objectIndex = 0;
 
 	// game-related variables
 	private GameContainer container;
@@ -115,6 +126,10 @@ public class Game extends BasicGameState implements LeapListener {
 		UI.enter();
 		UI.getCursor().hide();
 		UI.getGamepad().reset();
+		map = MusicController.getMap();
+		if (map == null)
+			ErrorHandler.error("Starting game with no map.", null, false);
+		objectIndex = 0;
 		musicEnterTimer = MUSIC_ENTER_TIME;
 	}
 
