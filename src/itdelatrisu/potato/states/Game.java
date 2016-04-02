@@ -13,6 +13,9 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
+import itdelatrisu.potato.audio.MusicController;
+import itdelatrisu.potato.audio.SoundController;
+import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.UI;
@@ -21,6 +24,12 @@ import itdelatrisu.potato.ui.UI;
  * "Game" state.
  */
 public class Game extends BasicGameState implements LeapListener {
+	/** Time before the music starts, in ms. */
+	private static final int MUSIC_ENTER_TIME = 1000;
+
+	/** Time left the music starts. */
+	private int musicEnterTimer;
+
 	// game-related variables
 	private GameContainer container;
 	private StateBasedGame game;
@@ -57,6 +66,12 @@ public class Game extends BasicGameState implements LeapListener {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		UI.update(delta);
+		if (musicEnterTimer > 0) {
+			musicEnterTimer -= delta;
+			if (musicEnterTimer <= 0)
+				MusicController.playAt(0, false);
+			return;
+		}
 		
 	}
 
@@ -67,7 +82,9 @@ public class Game extends BasicGameState implements LeapListener {
 	public void keyPressed(int key, char c) {
 		switch (key) {
 		case Input.KEY_ESCAPE:
-			
+			SoundController.playSound(SoundEffect.MENUBACK);
+			MusicController.playAt(0, true);
+			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_F12:
 			Utils.takeScreenShot();
@@ -101,6 +118,7 @@ public class Game extends BasicGameState implements LeapListener {
 			throws SlickException {
 		UI.enter();
 		UI.getCursor().hide();
+		musicEnterTimer = MUSIC_ENTER_TIME;
 	}
 
 	@Override

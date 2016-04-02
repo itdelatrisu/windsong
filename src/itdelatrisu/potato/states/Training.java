@@ -13,6 +13,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
+import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.ui.Fonts;
@@ -72,6 +73,7 @@ public class Training extends BasicGameState implements LeapListener {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		UI.enter();
+		MusicController.pause();
 	}
 
 	@Override
@@ -96,7 +98,8 @@ public class Training extends BasicGameState implements LeapListener {
 	public void keyPressed(int key, char c) {
 		switch (key) {
 		case Input.KEY_ESCAPE:
-			
+			MusicController.playAt(0, true);
+			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_F12:
 			Utils.takeScreenShot();

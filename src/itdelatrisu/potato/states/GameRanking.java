@@ -13,6 +13,9 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
+import itdelatrisu.potato.audio.MusicController;
+import itdelatrisu.potato.audio.SoundController;
+import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.UI;
 
@@ -49,6 +52,7 @@ public class GameRanking extends BasicGameState {
 		// - Show score/stats:
 		//
 		
+		UI.getBackButton().draw();
 		UI.draw(g);
 	}
 
@@ -56,7 +60,8 @@ public class GameRanking extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		UI.update(delta);
-		
+		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
+		UI.getBackButton().hoverUpdate(delta, mouseX, mouseY);
 	}
 
 	@Override
@@ -72,7 +77,9 @@ public class GameRanking extends BasicGameState {
 	public void keyPressed(int key, char c) {
 		switch (key) {
 		case Input.KEY_ESCAPE:
-			
+			SoundController.playSound(SoundEffect.MENUBACK);
+			MusicController.playAt(0, true);
+			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_F12:
 			Utils.takeScreenShot();
@@ -82,15 +89,20 @@ public class GameRanking extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		// TODO
-		// - If "back" is selected:
-		game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
+		if (UI.getBackButton().contains(x, y)) {
+			SoundController.playSound(SoundEffect.MENUBACK);
+			MusicController.playAt(0, true);
+			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
+			return;
+		}
 	}
 
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		UI.enter();
+		SoundController.playSound(SoundEffect.APPLAUSE);
+		UI.getBackButton().resetHover();
 	}
 
 	@Override
