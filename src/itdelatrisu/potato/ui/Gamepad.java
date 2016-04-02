@@ -5,6 +5,7 @@ import org.newdawn.slick.Image;
 
 import itdelatrisu.potato.ErrorHandler;
 import itdelatrisu.potato.GameImage;
+import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
 
@@ -66,13 +67,15 @@ public class Gamepad {
 	/**
 	 * Send a hit at the given position.
 	 * @param pos the gamepad position
+	 * @param sound the hit sound
 	 */
-	public void sendHit(int pos) {
+	public void sendHit(int pos, int sound) {
 		if (pos < 0 || pos >= GAMEPAD_BUTTONS) {
 			ErrorHandler.error(String.format("Send gamepad hit out of bounds: %d", pos), null, false);
 			return;
 		}
 		hitValues[pos].setTime(0);
+		SoundController.playHitSound(sound);
 	}
 
 	/**

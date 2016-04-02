@@ -77,11 +77,9 @@ public class LeapInput extends Listener {
 			} else {
 				long curTime = System.currentTimeMillis();
 				if (hand.isLeft() && !hasHitLeft && curTime - hitTimeLeft < HIT_TIME) {
-					System.out.println("L " + hit.x + " " + hit.y);
 					hasHitLeft = true;
 					fireHit(hit);
 				} else if (hand.isRight() && !hasHitRight && curTime - hitTimeRight < HIT_TIME) {
-					System.out.println("R " + hit.x + " " + hit.y);
 					hasHitRight = true;
 					fireHit(hit);
 				}

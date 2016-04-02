@@ -1,6 +1,5 @@
 package itdelatrisu.potato.states;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -11,13 +10,13 @@ import org.newdawn.slick.state.transition.EasedFadeOutTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.potato.App;
-import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.audio.SoundEffect;
+import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
-import itdelatrisu.potato.ui.Fonts;
+import itdelatrisu.potato.map.HitObject;
 import itdelatrisu.potato.ui.UI;
 
 /**
@@ -46,19 +45,15 @@ public class Game extends BasicGameState implements LeapListener {
 		this.container = container;
 		this.game = game;
 		this.input = container.getInput();
+
+		LeapController.addListener(this);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		g.drawImage(GameImage.BACKGROUND.getImage(), 0, 0);
 		int width = container.getWidth(), height = container.getHeight();
-		Fonts.LARGE.drawString(width / 10, height / 2 - Fonts.LARGE.getLineHeight() / 2, "In-Game", Color.white);
-
-		// TODO
-		// - Show gamepad:
-		//
-		
+		UI.getGamepad().draw(g);
 		UI.draw(g);
 	}
 
@@ -66,6 +61,7 @@ public class Game extends BasicGameState implements LeapListener {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		UI.update(delta);
+		UI.getGamepad().update(delta);
 		if (musicEnterTimer > 0) {
 			musicEnterTimer -= delta;
 			if (musicEnterTimer <= 0)
@@ -138,6 +134,6 @@ public class Game extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
-		UI.sendBarNotification(String.format("Leap Motion: [%d]", pos));
+		UI.getGamepad().sendHit(pos, HitObject.SOUND_CLAP);  // TODO: send hit object sound
 	}
 }

@@ -11,11 +11,11 @@ import org.newdawn.slick.state.transition.EasedFadeOutTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.potato.App;
-import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
+import itdelatrisu.potato.map.HitObject;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.UI;
 
@@ -47,15 +47,16 @@ public class Training extends BasicGameState implements LeapListener {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		int width = container.getWidth(), height = container.getHeight();
-		Fonts.LARGE.drawString(width / 10, height / 2 - Fonts.LARGE.getLineHeight() / 2, "Training", Color.white);
 
-		// TODO
-		// - Show gamepad:
-		//
-		// - Show a "continue" button:
-		//
-		
+		// show gamepad
 		UI.getGamepad().draw(g);
+
+		// text
+		float textY = height * 0.03f;
+		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
+		textY += height * 0.01f;
+		Fonts.MEDIUM.drawString(width * 0.04f, textY + Fonts.XLARGE.getLineHeight(), "Click anywhere or press space to continue.");
+
 		UI.draw(g);
 	}
 
@@ -85,8 +86,6 @@ public class Training extends BasicGameState implements LeapListener {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		// TODO
-		// - If "continue" is selected:
 		game.enterState(App.STATE_GAME, new EasedFadeOutTransition(), new FadeInTransition());
 	}
 
@@ -101,6 +100,9 @@ public class Training extends BasicGameState implements LeapListener {
 		case Input.KEY_ESCAPE:
 			MusicController.playAt(0, true);
 			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
+			break;
+		case Input.KEY_SPACE:
+			game.enterState(App.STATE_GAME, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_F12:
 			Utils.takeScreenShot();
@@ -118,6 +120,6 @@ public class Training extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
-		UI.getGamepad().sendHit(pos);
+		UI.getGamepad().sendHit(pos, HitObject.SOUND_CLAP);
 	}
 }
