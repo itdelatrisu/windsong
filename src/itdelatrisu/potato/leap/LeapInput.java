@@ -15,11 +15,11 @@ import itdelatrisu.potato.Utils;
  */
 public class LeapInput extends Listener {
 	private final double
-		X_MIN = -210.0, X_MAX = 210.0,
-		Z_MIN = -110.0, Z_MAX = 160.0;
-	private final double Y_HIT = 110.0;
-	private final double Y_THRESHOLD = 30.0;
-	private final long HIT_TIME = 200;
+		X_MIN = -250.0, X_MAX = 250.0,
+		Z_MIN = -120.0, Z_MAX = 130.0;
+	private final double[] Y_HIT = { 100.0, 110.0, 120.0 };
+	private final double Y_TOP = 150.0;
+	private final long HIT_TIME = 150;
 	private final int GRID_SIZE = 3;
 
 	private boolean hasHitLeft = false, hasHitRight = false;
@@ -32,8 +32,8 @@ public class LeapInput extends Listener {
 		for (int i = 0, numHands = frame.hands().count(); i < numHands; ++i) {
 			Hand hand = frame.hands().get(i);
 			double y = hand.stabilizedPalmPosition().getY();
-			if (hand.isLeft()) hasHitLeft = y <= Y_HIT + Y_THRESHOLD;
-			if (hand.isRight()) hasHitRight = y <= Y_HIT + Y_THRESHOLD;
+			if (hand.isLeft()) hasHitLeft = y <= Y_TOP;
+			if (hand.isRight()) hasHitRight = y <= Y_TOP;
 		}
 
 		// fire listeners
@@ -62,17 +62,19 @@ public class LeapInput extends Listener {
 			Vector curPos = hand.stabilizedPalmPosition();
 			double x = curPos.getX(), y = curPos.getY(), z = curPos.getZ();
 
-			if (y > Y_HIT + Y_THRESHOLD) {
+			if (y > Y_TOP) {
 				if (hand.isLeft()) { hasHitLeft = false; hitTimeLeft = -1; }
 				if (hand.isRight()) { hasHitRight = false; hitTimeRight = -1; }
-			} else if (y > Y_HIT) {
+				continue;
+			}
+
+			int px = Utils.clamp((int) (1.0 * GRID_SIZE * (x - X_MIN) / (X_MAX - X_MIN)), 0, GRID_SIZE - 1);
+			int pz = Utils.clamp((int) (1.0 * GRID_SIZE * (z - Z_MIN) / (Z_MAX - Z_MIN)), 0, GRID_SIZE - 1);
+			Point hit = new Point(pz, px);
+			if (y > Y_HIT[Math.abs(pz - 1) + Math.abs(px - 1)]) {
 				if (hitTimeLeft == -1) hitTimeLeft = System.currentTimeMillis();
 				if (hitTimeRight == -1) hitTimeRight = System.currentTimeMillis();
 			} else {
-				int px = Utils.clamp((int) (1.0 * GRID_SIZE * (x - X_MIN) / (X_MAX - X_MIN)), 0, GRID_SIZE - 1);
-				int pz = Utils.clamp((int) (1.0 * GRID_SIZE * (z - Z_MIN) / (Z_MAX - Z_MIN)), 0, GRID_SIZE - 1);
-				Point hit = new Point(pz, px);
-
 				long curTime = System.currentTimeMillis();
 				if (hand.isLeft() && !hasHitLeft && curTime - hitTimeLeft < HIT_TIME) {
 					System.out.println("L " + hit.x + " " + hit.y);
