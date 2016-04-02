@@ -20,6 +20,7 @@ import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
 import itdelatrisu.potato.leap.LeapController;
+import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.states.Game;
 import itdelatrisu.potato.states.GameRanking;
 import itdelatrisu.potato.states.MainMenu;
@@ -29,7 +30,7 @@ import itdelatrisu.potato.states.Training;
 /**
  * Main class.
  */
-public class App extends StateBasedGame {
+public class App extends StateBasedGame implements LeapListener {
 	/** Game states. */
 	public static final int
 		STATE_SPLASH        = 0,
@@ -47,6 +48,7 @@ public class App extends StateBasedGame {
 	 */
 	public App(String name) {
 		super(name);
+		LeapController.addListener(this);
 	}
 
 	@Override
@@ -185,4 +187,17 @@ public class App extends StateBasedGame {
 			ErrorHandler.error(message, e, true);
 		System.exit(1);
 	}
+
+	@Override
+	public void onConnect() {
+		Log.info("Connected Leap Motion controller.");
+	}
+
+	@Override
+	public void onDisconnect() {
+		Log.error("Leap Motion controller has disconnected.");
+	}
+
+	@Override
+	public void onHit(int pos) {}
 }

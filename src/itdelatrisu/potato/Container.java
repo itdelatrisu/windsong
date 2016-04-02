@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.opengl.InternalTextureLoader;
 
 import itdelatrisu.potato.audio.MusicController;
+import itdelatrisu.potato.leap.LeapController;
 
 /**
  * AppGameContainer extension that sends critical errors to ErrorHandler.
@@ -100,6 +101,9 @@ public class Container extends AppGameContainer {
 
 		// prevent loading tracks from re-initializing OpenAL
 		MusicController.reset();
+
+		// disconnect Leap Motion controller
+		LeapController.close();
 	}
 
 	@Override

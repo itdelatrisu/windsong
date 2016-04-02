@@ -71,7 +71,7 @@ public class LeapInput extends Listener {
 			} else {
 				int px = Utils.clamp((int) (1.0 * GRID_SIZE * (x - X_MIN) / (X_MAX - X_MIN)), 0, GRID_SIZE - 1);
 				int pz = Utils.clamp((int) (1.0 * GRID_SIZE * (z - Z_MIN) / (Z_MAX - Z_MIN)), 0, GRID_SIZE - 1);
-				Point hit = new Point(px, pz);
+				Point hit = new Point(pz, px);
 
 				long curTime = System.currentTimeMillis();
 				if (hand.isLeft() && !hasHitLeft && curTime - hitTimeLeft < HIT_TIME) {

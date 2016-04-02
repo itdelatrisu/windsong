@@ -13,13 +13,15 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
+import itdelatrisu.potato.leap.LeapController;
+import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.UI;
 
 /**
  * "Training" state.
  */
-public class Training extends BasicGameState {
+public class Training extends BasicGameState implements LeapListener {
 	// game-related variables
 	private GameContainer container;
 	private StateBasedGame game;
@@ -36,6 +38,8 @@ public class Training extends BasicGameState {
 		this.container = container;
 		this.game = game;
 		this.input = container.getInput();
+
+		LeapController.addListener(this);
 	}
 
 	@Override
@@ -98,5 +102,18 @@ public class Training extends BasicGameState {
 			Utils.takeScreenShot();
 			break;
 		}
+	}
+
+	@Override
+	public void onConnect() {}
+
+	@Override
+	public void onDisconnect() {}
+
+	@Override
+	public void onHit(int pos) {
+		if (game.getCurrentStateID() != this.getID())
+			return;
+		UI.sendBarNotification(String.format("Leap Motion: [%d]", pos));
 	}
 }

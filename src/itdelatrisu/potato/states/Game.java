@@ -13,13 +13,14 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.GameImage;
 import itdelatrisu.potato.Utils;
+import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.UI;
 
 /**
  * "Game" state.
  */
-public class Game extends BasicGameState {
+public class Game extends BasicGameState implements LeapListener {
 	// game-related variables
 	private GameContainer container;
 	private StateBasedGame game;
@@ -106,5 +107,18 @@ public class Game extends BasicGameState {
 	public void leave(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		UI.getCursor().show();
+	}
+
+	@Override
+	public void onConnect() {}
+
+	@Override
+	public void onDisconnect() {}
+
+	@Override
+	public void onHit(int pos) {
+		if (game.getCurrentStateID() != this.getID())
+			return;
+		UI.sendBarNotification(String.format("Leap Motion: [%d]", pos));
 	}
 }
