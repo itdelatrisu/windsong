@@ -106,7 +106,7 @@ public class Game extends BasicGameState implements LeapListener {
 
 	@Override
 	public void mouseWheelMoved(int newValue) {
-		
+		UI.changeVolume((newValue < 0) ? -1 : 1);
 	}
 
 	@Override

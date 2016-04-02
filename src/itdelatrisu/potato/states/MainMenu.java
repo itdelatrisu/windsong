@@ -222,6 +222,13 @@ public class MainMenu extends BasicGameState {
 
 	@Override
 	public void mouseWheelMoved(int newValue) {
+		// volume control if "alt" is pressed
+		if (input.isKeyDown(Input.KEY_LALT) || input.isKeyDown(Input.KEY_RALT)) {
+			UI.changeVolume((newValue < 0) ? -1 : 1);
+			return;
+		}
+
+		// scroll map listing
 		int shift = (newValue < 0) ? 1 : -1;
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
 		if (resultAreaContains(mouseX, mouseY))
