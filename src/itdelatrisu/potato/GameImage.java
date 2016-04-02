@@ -76,6 +76,12 @@ public enum GameImage {
 	SCORE_X ("score-x", "png"),
 
 	// Non-Game Components
+	STAR2 ("star2", "png", false, false) {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy((MENU_BUTTON_BG.getImage().getHeight() * 0.33f) / img.getHeight());
+		}
+	},
 	MUSIC_PLAY ("music-play", "png", false, false),
 	MUSIC_PAUSE ("music-pause", "png", false, false),
 	MUSIC_NEXT ("music-next", "png", false, false),

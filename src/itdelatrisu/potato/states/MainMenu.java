@@ -24,6 +24,7 @@ import itdelatrisu.potato.map.PotatoMap;
 import itdelatrisu.potato.ui.Colors;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.KineticScrolling;
+import itdelatrisu.potato.ui.StarStream;
 import itdelatrisu.potato.ui.UI;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
@@ -55,6 +56,9 @@ public class MainMenu extends BasicGameState {
 	/** Background alpha level (for fade-in effect). */
 	private AnimatedValue bgAlpha = new AnimatedValue(1100, 0f, 0.9f, AnimationEquation.LINEAR);
 
+	/** The star stream. */
+	private StarStream starStream;
+
 	// game-related variables
 	private GameContainer container;
 	private StateBasedGame game;
@@ -82,25 +86,43 @@ public class MainMenu extends BasicGameState {
 		buttonHeight = Fonts.MEDIUM.getLineHeight() * 2.1f;
 		buttonOffset = buttonHeight * 1.1f;
 		maxResultsShown = (int) ((height - buttonBaseY - (height * 0.05f) + Fonts.LARGE.getLineHeight()) / buttonOffset);
+
+		// star stream
+		starStream = new StarStream(width, height);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		Image bg = GameImage.BACKGROUND.getImage().copy();
-		bg.setAlpha(bgAlpha.getValue());
-		bg.draw();
-
 		int width = container.getWidth(), height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
 		boolean inDropdownMenu = false;  // TODO?
 
-		// title
-		Fonts.LARGE.drawString(width * 0.024f, height * 0.03f, "Main Menu", Color.white);
-
-		// map listing
 		List<PotatoMap> maps = MapParser.getMaps();
 		int numMaps = maps.size();
+		PotatoMap focusMap = (focusIndex != -1) ? maps.get(focusIndex) : null;
+
+		// background
+		Image bg = GameImage.BACKGROUND.getImage().copy();
+		bg.setAlpha(bgAlpha.getValue());
+		bg.draw();
+
+		// star stream
+		starStream.draw();
+
+		// title
+		float textY = height * 0.03f;
+		Fonts.XLARGE.drawString(buttonBaseX, textY, "Potato", Color.white);
+		textY += height * 0.01f;
+		if (focusMap != null) {
+			float textOffsetX = Fonts.MEDIUMBOLD.getWidth("Selected: ");
+			Fonts.MEDIUMBOLD.drawString(buttonBaseX, textY + Fonts.XLARGE.getLineHeight(), "Selected: ");
+			Fonts.MEDIUM.drawString(buttonBaseX + textOffsetX, textY + Fonts.XLARGE.getLineHeight(), focusMap.title);
+			Fonts.MEDIUM.drawString(buttonBaseX + textOffsetX, textY + Fonts.XLARGE.getLineHeight() + Fonts.MEDIUM.getLineHeight(), focusMap.artist);
+		} else
+			Fonts.MEDIUM.drawString(buttonBaseX, textY + Fonts.XLARGE.getLineHeight(), "Select a song to begin!");
+
+		// map listing
 		clipToResultArea(g);
 		int startResult = (int) (startResultPos.getPosition() / buttonOffset);
 		int offset = (int) (-startResultPos.getPosition() + startResult * buttonOffset);
@@ -130,6 +152,7 @@ public class MainMenu extends BasicGameState {
 		startResultPos.update(delta);
 		if (focusIndex != -1 && focusTimer < FOCUS_DELAY)
 			focusTimer += delta;
+		starStream.update(delta);
 	}
 
 	@Override
@@ -139,9 +162,9 @@ public class MainMenu extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		UI.enter();
-		bgAlpha.setTime(0);
 		startResultPos.setPosition(0);
 		focusIndex = -1;
+		starStream.clear();
 	}
 
 	@Override
