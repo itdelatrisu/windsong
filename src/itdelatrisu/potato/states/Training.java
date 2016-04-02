@@ -33,7 +33,7 @@ public class Training extends BasicGameState implements LeapListener {
 	private final int state;
 	
 	private static final float EVENT_INTERVAL = 2000;
-	private static float timeToNext = EVENT_INTERVAL;
+	private float timeToNext = EVENT_INTERVAL;
 	
 	public Training(int state) {
 		this.state = state;
@@ -58,7 +58,7 @@ public class Training extends BasicGameState implements LeapListener {
 		// show gamepad
 		UI.getGamepad().draw(g);
 
-		// text
+		// text	
 		float textY = height * 0.03f;
 		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
 		textY += height * 0.01f + Fonts.XLARGE.getLineHeight();
