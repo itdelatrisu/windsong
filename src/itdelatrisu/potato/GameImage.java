@@ -15,6 +15,19 @@ import itdelatrisu.potato.ui.Fonts;
  * Game images.
  */
 public enum GameImage {
+	// Gamepad
+	GAMEPAD ("gamepad", "png"),
+	GAMEPAD_BG ("gamepad-bg", "png|jpg"),
+	GAMEPAD_0 ("gamepad-0", "png"),
+	GAMEPAD_1 ("gamepad-1", "png"),
+	GAMEPAD_2 ("gamepad-2", "png"),
+	GAMEPAD_3 ("gamepad-3", "png"),
+	GAMEPAD_4 ("gamepad-4", "png"),
+	GAMEPAD_5 ("gamepad-5", "png"),
+	GAMEPAD_6 ("gamepad-6", "png"),
+	GAMEPAD_7 ("gamepad-7", "png"),
+	GAMEPAD_8 ("gamepad-8", "png"),
+
 	// Game Data
 	COMBO_BURST ("comboburst", "comboburst-%d", "png"),
 	SCOREBAR_BG ("scorebar-bg", "png"),
