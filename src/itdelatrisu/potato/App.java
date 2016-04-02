@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.DefaultLogSystem;
@@ -120,6 +121,9 @@ public class App extends StateBasedGame {
 
 		// set the resource paths
 		ResourceLoader.addResourceLocation(new FileSystemLocation(new File("./res/")));
+
+		// disable jinput
+		Input.disableControllers();
 
 		// start leap controller
 		new Thread() {
