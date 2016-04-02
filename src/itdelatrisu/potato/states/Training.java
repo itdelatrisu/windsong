@@ -46,7 +46,6 @@ public class Training extends BasicGameState implements LeapListener {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		g.drawImage(GameImage.BACKGROUND.getImage(), 0, 0);
 		int width = container.getWidth(), height = container.getHeight();
 		Fonts.LARGE.drawString(width / 10, height / 2 - Fonts.LARGE.getLineHeight() / 2, "Training", Color.white);
 
@@ -56,6 +55,7 @@ public class Training extends BasicGameState implements LeapListener {
 		// - Show a "continue" button:
 		//
 		
+		UI.getGamepad().draw(g);
 		UI.draw(g);
 	}
 
@@ -63,7 +63,7 @@ public class Training extends BasicGameState implements LeapListener {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		UI.update(delta);
-
+		UI.getGamepad().update(delta);
 	}
 
 	@Override
@@ -73,6 +73,7 @@ public class Training extends BasicGameState implements LeapListener {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		UI.enter();
+		UI.getGamepad().reset();
 		MusicController.pause();
 	}
 
@@ -117,6 +118,6 @@ public class Training extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
-		UI.sendBarNotification(String.format("Leap Motion: [%d]", pos));
+		UI.getGamepad().sendHit(pos);
 	}
 }

@@ -16,17 +16,72 @@ import itdelatrisu.potato.ui.Fonts;
  */
 public enum GameImage {
 	// Gamepad
-	GAMEPAD ("gamepad", "png"),
-	GAMEPAD_BG ("gamepad-bg", "png|jpg"),
-	GAMEPAD_0 ("gamepad-0", "png"),
-	GAMEPAD_1 ("gamepad-1", "png"),
-	GAMEPAD_2 ("gamepad-2", "png"),
-	GAMEPAD_3 ("gamepad-3", "png"),
-	GAMEPAD_4 ("gamepad-4", "png"),
-	GAMEPAD_5 ("gamepad-5", "png"),
-	GAMEPAD_6 ("gamepad-6", "png"),
-	GAMEPAD_7 ("gamepad-7", "png"),
-	GAMEPAD_8 ("gamepad-8", "png"),
+	GAMEPAD ("gamepad", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_BG ("gamepad-bg", "png|jpg") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_0 ("gamepad-0", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_1 ("gamepad-1", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_2 ("gamepad-2", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_3 ("gamepad-3", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_4 ("gamepad-4", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_5 ("gamepad-5", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_6 ("gamepad-6", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_7 ("gamepad-7", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
+	GAMEPAD_8 ("gamepad-8", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy(w, h);
+		}
+	},
 
 	// Game Data
 	COMBO_BURST ("comboburst", "comboburst-%d", "png"),

@@ -118,6 +118,7 @@ public class Game extends BasicGameState implements LeapListener {
 			throws SlickException {
 		UI.enter();
 		UI.getCursor().hide();
+		UI.getGamepad().reset();
 		musicEnterTimer = MUSIC_ENTER_TIME;
 	}
 

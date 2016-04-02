@@ -54,6 +54,9 @@ public class UI {
 	/** The alpha level of the current tooltip (if any). */
 	private static AnimatedValue tooltipAlpha = new AnimatedValue(200, 0f, 1f, AnimationEquation.LINEAR);
 
+	/** The gamepad instance. */
+	private static Gamepad gamepad;
+
 	// game-related variables
 	private static GameContainer container;
 	private static Input input;
@@ -84,6 +87,9 @@ public class UI {
 		backButton.setHoverAnimationDuration(350);
 		backButton.setHoverAnimationEquation(AnimationEquation.IN_OUT_BACK);
 		backButton.setHoverExpand(MenuButton.Expand.UP_RIGHT);
+
+		// gamepad
+		gamepad = new Gamepad();
 	}
 
 	/**
@@ -139,6 +145,11 @@ public class UI {
 	 * Returns the 'menu-back' MenuButton.
 	 */
 	public static MenuButton getBackButton() { return backButton; }
+
+	/**
+	 * Returns the gamepad instance.
+	 */
+	public static Gamepad getGamepad() { return gamepad; }
 
 	/**
 	 * Draws the FPS at the bottom-right corner of the game container.
