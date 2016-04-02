@@ -11,12 +11,14 @@ import org.newdawn.slick.state.transition.EasedFadeOutTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.potato.App;
+import itdelatrisu.potato.ScoreData;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.map.HitObject;
 import itdelatrisu.potato.ui.Fonts;
+import itdelatrisu.potato.ui.Gamepad;
 import itdelatrisu.potato.ui.UI;
 
 /**
@@ -27,8 +29,12 @@ public class Training extends BasicGameState implements LeapListener {
 	private GameContainer container;
 	private StateBasedGame game;
 	private Input input;
+	private ScoreData scoreData;
 	private final int state;
-
+	
+	private static final float EVENT_INTERVAL = 2000;
+	private static float timeToNext = EVENT_INTERVAL;
+	
 	public Training(int state) {
 		this.state = state;
 	}
@@ -39,6 +45,7 @@ public class Training extends BasicGameState implements LeapListener {
 		this.container = container;
 		this.game = game;
 		this.input = container.getInput();
+		this.scoreData = new ScoreData();
 
 		LeapController.addListener(this);
 	}
@@ -54,8 +61,12 @@ public class Training extends BasicGameState implements LeapListener {
 		// text
 		float textY = height * 0.03f;
 		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
-		textY += height * 0.01f;
-		Fonts.MEDIUM.drawString(width * 0.04f, textY + Fonts.XLARGE.getLineHeight(), "Click anywhere or press space to continue.");
+		textY += height * 0.01f + Fonts.XLARGE.getLineHeight();
+		Fonts.MEDIUM.drawString(width * 0.04f, textY, "Click anywhere or press space to continue.");
+		
+		// temporary until we use jeffrey's cool score thing
+		textY += height * 0.02f + Fonts.MEDIUM.getLineHeight();
+		Fonts.MEDIUM.drawString(width * 0.04f, textY, String.format("Score: %d", scoreData.getScore()));
 
 		UI.draw(g);
 	}
@@ -63,8 +74,19 @@ public class Training extends BasicGameState implements LeapListener {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
+		Gamepad gp = UI.getGamepad();
+		
+		timeToNext -= delta;
+		if (timeToNext < 0) {
+			timeToNext = EVENT_INTERVAL;
+			int pos = (int) ( Math.random()*9 );
+			gp.sendMapObject(pos, 750); // use the constant variable name
+			scoreData.sendMapObject(pos, 750);
+		}
+		
 		UI.update(delta);
-		UI.getGamepad().update(delta);
+		gp.update(delta);
+		scoreData.update(delta);
 	}
 
 	@Override
@@ -120,6 +142,7 @@ public class Training extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
+		scoreData.sendHit(pos);
 		UI.getGamepad().sendHit(pos, HitObject.SOUND_CLAP);
 	}
 }
