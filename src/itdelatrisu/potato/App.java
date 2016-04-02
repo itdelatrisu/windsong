@@ -18,6 +18,7 @@ import org.newdawn.slick.util.FileSystemLocation;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
+import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.states.Game;
 import itdelatrisu.potato.states.GameRanking;
 import itdelatrisu.potato.states.MainMenu;
@@ -119,6 +120,12 @@ public class App extends StateBasedGame {
 
 		// set the resource paths
 		ResourceLoader.addResourceLocation(new FileSystemLocation(new File("./res/")));
+
+		// start leap controller
+		new Thread() {
+			@Override
+			public void run() { LeapController.init(); }
+		}.start();
 
 		// start the game
 		try {
