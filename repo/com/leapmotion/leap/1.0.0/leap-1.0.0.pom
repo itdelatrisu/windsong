@@ -11,5 +11,17 @@
 			<version>1.0.0</version>
 			<classifier>natives-windows</classifier>
 		</dependency>
+		<dependency>
+			<groupId>com.leapmotion</groupId>
+			<artifactId>leap-platform</artifactId>
+			<version>1.0.0</version>
+			<classifier>natives-linux</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.leapmotion</groupId>
+			<artifactId>leap-platform</artifactId>
+			<version>1.0.0</version>
+			<classifier>natives-osx</classifier>
+		</dependency>
 	</dependencies>
 </project>

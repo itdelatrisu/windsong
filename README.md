@@ -20,11 +20,11 @@ Maven builds are built to the `target` directory.
   (`-DXDG=true`) will make the application use XDG folders under Unix-like
   operating systems.
 
-Note that the program will only support 64-bit versions of Windows with the
-default settings, due to how the Leap Motion SDK is set up.  To run the program
-on a 32-bit machine, replace `leap-platform-1.0.0-natives-windows.jar` with
-`leap-platform-1.0.0-natives-windows.x86.jar` in the local Maven repository
-(`repo/com/leapmotion/leap-platform/1.0.0/`).
+Note that the program will only support 64-bit versions of Windows and Linux
+with the default settings, due to how the Leap Motion SDK is set up.  To run
+the program on a 32-bit machine, replace `leap-platform-1.0.0-natives-(windows|linux).jar`
+with `leap-platform-1.0.0-natives-(windows|linux).x86.jar` in the local Maven
+repository (`repo/com/leapmotion/leap-platform/1.0.0/`).
 
 ## Credits
 This work is based on [opsu!](https://github.com/itdelatrisu/opsu).
