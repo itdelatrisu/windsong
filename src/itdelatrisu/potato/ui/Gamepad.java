@@ -2,16 +2,19 @@ package itdelatrisu.potato.ui;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.util.Log;
 
 import itdelatrisu.potato.ErrorHandler;
 import itdelatrisu.potato.GameImage;
+import itdelatrisu.potato.leap.LeapController;
+import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
 
 /**
  * Leap Motion gamepad.
  */
-public class Gamepad {
+public class Gamepad implements LeapListener {
 	/** Number of gamepad positions. */
 	private static final int GAMEPAD_BUTTONS = 9;
 
@@ -23,6 +26,9 @@ public class Gamepad {
 
 	/** Gamepad hit images. */
 	private Image[] hitImages;
+	
+	/** Hand position images. */
+	private Image[] handPosImages;
 
 	/** Alpha values of hits for each gamepad position. */
 	private AnimatedValue[] hitValues;
@@ -35,6 +41,10 @@ public class Gamepad {
 
 	/** Whether the map object is fading in at each gamepad position. */
 	private boolean[] mapObjectFadingIn;
+	
+	/** Current location of the user's hand */
+	private int leftHandPos = -1;
+	private int rightHandPos = -1;
 
 	/**
 	 * Constructor.
@@ -42,6 +52,7 @@ public class Gamepad {
 	public Gamepad() {
 		hitImages = new Image[GAMEPAD_BUTTONS];
 		hitValues = new AnimatedValue[GAMEPAD_BUTTONS];
+		handPosImages = new Image[GAMEPAD_BUTTONS * 2];
 		mapObjectImages = new Image[GAMEPAD_BUTTONS];
 		mapObjectValues = new AnimatedValue[GAMEPAD_BUTTONS];
 		mapObjectFadingIn = new boolean[GAMEPAD_BUTTONS];
@@ -50,7 +61,11 @@ public class Gamepad {
 			hitValues[i] = new AnimatedValue(HIT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
 			mapObjectImages[i] = GameImage.valueOf(String.format("GAMEPAD_MAP_%d", i)).getImage().copy();
 			mapObjectValues[i] = new AnimatedValue(1, 0f, 0f, AnimationEquation.LINEAR);  // dummy
+			// handPosImages[i] = GameImage.valueOf(String.format("GAMEPAD_LEFT_%d", i)).getImage().copy();
+			// handPosImages[i+GAMEPAD_BUTTONS] = GameImage.valueOf(String.format("GAMEPAD_RIGHT_%d", i)).getImage().copy();
 		}
+
+		LeapController.addListener(this);
 	}
 
 	/**
@@ -74,6 +89,11 @@ public class Gamepad {
 		}
 		Image gamepad = GameImage.GAMEPAD.getImage();
 		gamepad.draw();
+		
+		if (leftHandPos > -1)
+			handPosImages[leftHandPos].draw();
+		if (rightHandPos > -1)
+			handPosImages[rightHandPos].draw();
 	}
 
 	/**
@@ -136,5 +156,26 @@ public class Gamepad {
 			mapObjectValues[i] = new AnimatedValue(1, 0f, 0f, AnimationEquation.LINEAR);  // dummy
 			mapObjectFadingIn[i] = false;
 		}
+	}
+	
+	@Override
+	public void onConnect() {
+		Log.info("Connected Leap Motion controller.");
+	}
+
+	@Override
+	public void onDisconnect() {
+		Log.error("Leap Motion controller has disconnected.");
+	}
+
+	@Override
+	public void onHit(int pos) {}
+	
+	@Override
+	public void onPos(boolean leftHand, int pos) {
+		if (leftHand)
+			this.leftHandPos = pos;
+		else
+			this.rightHandPos = pos;
 	}
 }

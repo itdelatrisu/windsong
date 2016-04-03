@@ -191,16 +191,19 @@ public class App extends StateBasedGame implements LeapListener {
 		System.exit(1);
 	}
 
-	@Override
-	public void onConnect() {
-		Log.info("Connected Leap Motion controller.");
-	}
-
-	@Override
-	public void onDisconnect() {
-		Log.error("Leap Motion controller has disconnected.");
-	}
-
-	@Override
-	public void onHit(int pos) {}
+		@Override
+		public void onConnect() {
+			Log.info("Connected Leap Motion controller.");
+		}
+	
+		@Override
+		public void onDisconnect() {
+			Log.error("Leap Motion controller has disconnected.");
+		}
+	
+		@Override
+		public void onHit(int pos) {}
+		
+		@Override
+		public void onPos(boolean leftHand, int pos) {}
 }

@@ -48,6 +48,12 @@ public class LeapController {
 	 * @param listener the listener
 	 */
 	public static void addListener(LeapListener listener) { gameListeners.add(listener); }
+	
+	/**
+	 * Removes a listener from the Leap Motion controller.
+	 * @param listener the listener
+	 */
+	public static void removeListener(LeapListener listener) { gameListeners.remove(listener); }
 
 	/**
 	 * Returns all registered listeners.

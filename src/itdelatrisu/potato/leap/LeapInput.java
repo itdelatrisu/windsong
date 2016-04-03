@@ -1,5 +1,7 @@
 package itdelatrisu.potato.leap;
 
+import itdelatrisu.potato.ui.UI;
+
 import java.awt.Point;
 
 import com.leapmotion.leap.Controller;
@@ -51,14 +53,36 @@ public class LeapInput extends Listener {
 		for (LeapListener listener : LeapController.getListeners())
 			listener.onHit(p.x * GRID_SIZE + p.y);
 	}
+	
+	private void firePos(boolean leftHand, Point p) {
+		for (LeapListener listener : LeapController.getListeners())
+			listener.onPos(leftHand, p.x * GRID_SIZE + p.y);
+	}
 
 	@Override
 	public void onFrame(Controller controller) {
 		Frame frame = controller.frame();
-		for (int i = 0, numHands = frame.hands().count(); i < numHands; ++i) {
+		
+		int numHands = frame.hands().count();
+		if (numHands < 1) { 
+			firePos(false, new Point(0, -1));
+			firePos(true, new Point(0, -1));
+		}
+		else if (numHands == 1) {
+			Hand hand = frame.hands().get(0);
+			firePos(!hand.isLeft(), new Point(0, -1));
+		}
+		
+		for (int i = 0; i < numHands; ++i) {
 			Hand hand = frame.hands().get(i);
 			Vector curPos = hand.stabilizedPalmPosition();
 			double x = curPos.getX(), y = curPos.getY(), z = curPos.getZ();
+
+			int px = (x < X_LEFT) ? 0 : ((x < X_RIGHT) ? 1 : 2);
+			int pz = (z < Z_FAR) ? 0 : ((z < Z_NEAR) ? 1 : 2);
+			Point hit = new Point(pz, px);
+
+			firePos(hand.isLeft(), hit);
 
 			if (y > Y_TOP) {
 				if (hand.isLeft()) { hasHitLeft = false; hitTimeLeft = -1; }
@@ -66,9 +90,6 @@ public class LeapInput extends Listener {
 				continue;
 			}
 
-			int px = (x < X_LEFT) ? 0 : ((x < X_RIGHT) ? 1 : 2);
-			int pz = (z < Z_FAR) ? 0 : ((z < Z_NEAR) ? 1 : 2);
-			Point hit = new Point(pz, px);
 			if (y > Y_HIT[Math.abs(pz - 1) + Math.abs(px - 1)]) {
 				if (hitTimeLeft == -1) hitTimeLeft = System.currentTimeMillis();
 				if (hitTimeRight == -1) hitTimeRight = System.currentTimeMillis();

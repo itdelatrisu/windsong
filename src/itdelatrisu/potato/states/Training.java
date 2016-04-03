@@ -160,6 +160,9 @@ public class Training extends BasicGameState implements LeapListener {
 
 	@Override
 	public void onDisconnect() {}
+	
+	@Override
+	public void onPos(boolean leftHand, int pos) {}
 
 	@Override
 	public void onHit(int pos) {
