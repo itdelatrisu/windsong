@@ -337,7 +337,7 @@ public class MainMenu extends BasicGameState {
 				String.format("%s - %s", map.artist, map.title), Color.white);
 		Fonts.DEFAULT.drawString(
 				textX, y + marginY + Fonts.BOLD.getLineHeight(),
-				String.format("Difficulty: %d", map.difficulty), Color.white);
+				String.format("Difficulty: %s", map.getDifficulty()), Color.white);
 		Fonts.DEFAULT.drawString(
 				edgeX - Fonts.DEFAULT.getWidth(map.creator), y + marginY,
 				map.creator, Color.white);

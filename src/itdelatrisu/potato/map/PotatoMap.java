@@ -48,6 +48,17 @@ public class PotatoMap implements Comparable<PotatoMap> {
 	public int getEndTime() { return objects[objects.length - 1].getTime(); }
 
 	/**
+	 * Returns the difficulty as a string.
+	 * @return the difficulty
+	 */
+	public String getDifficulty() {
+		if      (difficulty <= 3) return "Easy";
+		else if (difficulty <= 5) return "Standard";
+		else if (difficulty <= 7) return "Difficulty";
+		else                      return "Insane";
+	}
+
+	/**
 	 * Compares two PotatoMap objects based on difficulty.
 	 */
 	@Override
