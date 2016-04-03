@@ -130,24 +130,6 @@ public enum GameImage {
 			return img.getScaledCopy(w, h);
 		}
 	},
-	GAMERIGHT_3 ("gameright-3", "png") {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy(w, h);
-		}
-	},
-	GAMERIGHT_4 ("gameright-4", "png") {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy(w, h);
-		}
-	},
-	GAMERIGHT_5 ("gameright-5", "png") {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy(w, h);
-		}
-	},
 	// Game Data
 	LOSE ("rip", "png") {
 		@Override

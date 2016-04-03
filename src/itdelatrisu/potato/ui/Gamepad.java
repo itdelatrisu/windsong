@@ -61,8 +61,8 @@ public class Gamepad implements LeapListener {
 			hitValues[i] = new AnimatedValue(HIT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
 			mapObjectImages[i] = GameImage.valueOf(String.format("GAMEPAD_MAP_%d", i)).getImage().copy();
 			mapObjectValues[i] = new AnimatedValue(1, 0f, 0f, AnimationEquation.LINEAR);  // dummy
-			// handPosImages[i] = GameImage.valueOf(String.format("GAMEPAD_LEFT_%d", i)).getImage().copy();
-			// handPosImages[i+GAMEPAD_BUTTONS] = GameImage.valueOf(String.format("GAMEPAD_RIGHT_%d", i)).getImage().copy();
+			handPosImages[i] = GameImage.valueOf(String.format("GAMEPAD_LEFT_%d", i)).getImage().copy();
+			handPosImages[i+GAMEPAD_BUTTONS] = GameImage.valueOf(String.format("GAMEPAD_RIGHT_%d", i)).getImage().copy();
 		}
 
 		LeapController.addListener(this);
