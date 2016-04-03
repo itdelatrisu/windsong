@@ -98,8 +98,10 @@ public class Game extends BasicGameState implements LeapListener {
 
 		// is the game finished?
 		if (objectIndex >= map.objects.length) {
-			if (trackPosition >= map.getEndTime() + MUSIC_END_TIME_DELAY)
+			if (trackPosition >= map.getEndTime() + MUSIC_END_TIME_DELAY) {
+				((GameRanking)(game.getState(App.STATE_GAMERANKING))).setScoreData(scoreData);
 				game.enterState(App.STATE_GAMERANKING, new EasedFadeOutTransition(), new FadeInTransition());
+			}
 			return;
 		}
 
@@ -127,7 +129,6 @@ public class Game extends BasicGameState implements LeapListener {
 		case Input.KEY_ESCAPE:
 			SoundController.playSound(SoundEffect.MENUBACK);
 			MusicController.playAt(0, true);
-			((GameRanking)(game.getState(App.STATE_GAMERANKING))).setScoreData(scoreData);
 			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_SPACE:
