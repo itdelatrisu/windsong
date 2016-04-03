@@ -33,8 +33,9 @@ public class Training extends BasicGameState implements LeapListener {
 	/** The interval between map hit objects, in ms. */
 	private static final int EVENT_INTERVAL = 2000;
 
-	private int timeToNext = EVENT_INTERVAL;
-	private int time = 0;
+	private int timeToNext = EVENT_INTERVAL; // time remaining until next hit object
+	private int time = 0; // time since training started
+	private boolean soundPlayed = false;
 
 	// game-related variables
 	private GameContainer container;
@@ -90,8 +91,12 @@ public class Training extends BasicGameState implements LeapListener {
 			HitObject hit = new HitObject(time + ScoreData.HIT_OBJECT_FADEIN_TIME, pos, HitObject.SOUND_CLAP);
 			scoreData.sendMapObject(hit);
 
-			SoundController.playSound(SoundEffect.MENUCLICK);
+			soundPlayed = false;
 			timeToNext = EVENT_INTERVAL;
+		}
+		if (!soundPlayed && timeToNext < EVENT_INTERVAL - ScoreData.HIT_OBJECT_FADEIN_TIME) {
+			soundPlayed = true;
+			SoundController.playSound(SoundEffect.MENUCLICK);
 		}
 		
 		UI.update(delta);
@@ -111,6 +116,7 @@ public class Training extends BasicGameState implements LeapListener {
 		scoreData = new ScoreData();
 		timeToNext = EVENT_INTERVAL;
 		time = 0;
+		soundPlayed = false;
 	}
 
 	@Override
