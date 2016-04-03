@@ -369,7 +369,7 @@ public class ScoreData {
 					points = MISS;
 					hitMiss++;
 					lastHitResult = GameImage.HIT_MISS;
-					changeHealth(-5f);
+					changeHealth(-3f);
 					resetComboStreak();
 				}
 				lastHitResultValue.setTime(0);
@@ -414,7 +414,7 @@ public class ScoreData {
 
 			// count misses and break combo
 			hitMiss += toRemove.size();
-			changeHealth(-5f * toRemove.size());
+			changeHealth(-3f * toRemove.size());
 			resetComboStreak();
 			lastHitResult = GameImage.HIT_MISS;
 			lastHitResultValue.setTime(0);
@@ -443,7 +443,7 @@ public class ScoreData {
 
 		// drain health...
 		if (!hitObjects.isEmpty())
-			changeHealth(-delta / 200f);
+			changeHealth(-delta / 250f);
 
 		// health display
 		if (healthDisplay != health) {

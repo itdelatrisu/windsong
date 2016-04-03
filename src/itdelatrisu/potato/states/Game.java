@@ -31,6 +31,9 @@ public class Game extends BasicGameState implements LeapListener {
 	/** Time before entering the ranking screen after the last hit object, in ms. */
 	private static final int MUSIC_END_TIME_DELAY = 2000;
 
+	/** Music fade-out time, in milliseconds. */
+	private static final int MUSIC_FADEOUT_TIME = 500;
+
 	/** Time left the music starts. */
 	private int musicEnterTimer;
 
@@ -107,8 +110,9 @@ public class Game extends BasicGameState implements LeapListener {
 
 		// dead?
 		if (scoreData.getHealth() < 1f) {
-			// TODO
-			// game over :(
+			MusicController.fadeOut(MUSIC_FADEOUT_TIME);
+			game.enterState(App.STATE_GAMEOVER, new EasedFadeOutTransition(), new FadeInTransition());
+			return;
 		}
 
 		// advance objectIndex

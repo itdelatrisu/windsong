@@ -22,6 +22,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.states.Game;
+import itdelatrisu.potato.states.GameOver;
 import itdelatrisu.potato.states.GameRanking;
 import itdelatrisu.potato.states.MainMenu;
 import itdelatrisu.potato.states.Splash;
@@ -37,7 +38,8 @@ public class App extends StateBasedGame implements LeapListener {
 		STATE_MAINMENU      = 1,
 		STATE_TRAINING      = 2,
 		STATE_GAME          = 3,
-		STATE_GAMERANKING   = 4;
+		STATE_GAMERANKING   = 4,
+		STATE_GAMEOVER      = 5;
 
 	/** Server socket for restricting the program to a single instance. */
 	private static ServerSocket SERVER_SOCKET;
@@ -58,6 +60,7 @@ public class App extends StateBasedGame implements LeapListener {
 		addState(new Training(STATE_TRAINING));
 		addState(new Game(STATE_GAME));
 		addState(new GameRanking(STATE_GAMERANKING));
+		addState(new GameOver(STATE_GAMEOVER));
 	}
 
 	/**

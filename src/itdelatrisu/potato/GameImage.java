@@ -132,6 +132,12 @@ public enum GameImage {
 	},
 
 	// Game Data
+	LOSE ("rip", "png") {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy((w * 0.7f) / img.getWidth());
+		}
+	},
 	SCOREBAR_BG ("scorebar-bg", "png"),
 	SCOREBAR_COLOUR ("scorebar-colour", "scorebar-colour-%d", "png"),
 	SCOREBAR_KI ("scorebar-ki", "png"),
