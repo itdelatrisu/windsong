@@ -119,14 +119,18 @@ public class MainMenu extends BasicGameState {
 		// title
 		float textY = height * 0.03f;
 		Fonts.XLARGE.drawString(buttonBaseX, textY, "Potato", Color.white);
-		textY += height * 0.01f;
+		textY += Fonts.XLARGE.getLineHeight() + height * 0.01f;
 		if (focusMap != null) {
-			float textOffsetX = Fonts.MEDIUMBOLD.getWidth("Selected: ");
-			Fonts.MEDIUMBOLD.drawString(buttonBaseX, textY + Fonts.XLARGE.getLineHeight(), "Selected: ");
-			Fonts.MEDIUM.drawString(buttonBaseX + textOffsetX, textY + Fonts.XLARGE.getLineHeight(), focusMap.title);
-			Fonts.MEDIUM.drawString(buttonBaseX + textOffsetX, textY + Fonts.XLARGE.getLineHeight() + Fonts.MEDIUM.getLineHeight(), focusMap.artist);
+			String s1 = "You've selected ", s2 = " by ", s3 = ".";
+			float offsetS1 = Fonts.MEDIUM.getWidth(s1), offsetS2 = Fonts.MEDIUM.getWidth(s2);
+			float offsetTitle = Fonts.MEDIUMBOLD.getWidth(focusMap.title), offsetArtist = Fonts.MEDIUMBOLD.getWidth(focusMap.artist);
+			Fonts.MEDIUM.drawString(buttonBaseX, textY, s1);
+			Fonts.MEDIUMBOLD.drawString(buttonBaseX + offsetS1, textY, focusMap.title);
+			Fonts.MEDIUM.drawString(buttonBaseX + offsetS1 + offsetTitle, textY, s2);
+			Fonts.MEDIUMBOLD.drawString(buttonBaseX + offsetS1 + offsetTitle + offsetS2, textY, focusMap.artist);
+			Fonts.MEDIUM.drawString(buttonBaseX + offsetS1 + offsetTitle + offsetS2 + offsetArtist, textY, s3);
 		} else
-			Fonts.MEDIUM.drawString(buttonBaseX, textY + Fonts.XLARGE.getLineHeight(), "Select a song to begin!");
+			Fonts.MEDIUM.drawString(buttonBaseX, textY, "Select a song and press space to begin.");
 
 		// map listing
 		clipToResultArea(g);
@@ -208,11 +212,11 @@ public class MainMenu extends BasicGameState {
 						focusTimer = 0;
 						MusicController.play(maps.get(index), true);
 					}
-					break;
+					return;
 				}
 			}
-			return;
 		}
+		focusIndex = -1;
 	}
 
 	@Override

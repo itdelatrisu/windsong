@@ -76,7 +76,9 @@ public class Training extends BasicGameState implements LeapListener {
 		float textY = height * 0.03f;
 		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
 		textY += height * 0.01f + Fonts.XLARGE.getLineHeight();
-		Fonts.MEDIUM.drawString(width * 0.04f, textY, "Click anywhere or press space to continue.");
+		Fonts.MEDIUM.drawString(width * 0.04f, textY, "Hit the illuminated square when the pattern is fully visible.");
+		textY += Fonts.MEDIUM.getLineHeight() * 1.1f;
+		Fonts.MEDIUM.drawString(width * 0.04f, textY, "When you are ready, press space or click anywhere to continue.");
 
 		UI.draw(g);
 	}
