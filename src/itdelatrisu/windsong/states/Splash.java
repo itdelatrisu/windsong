@@ -23,8 +23,6 @@ import itdelatrisu.windsong.ui.animations.AnimationEquation;
 
 /**
  * "Splash Screen" state.
- * <p>
- * Loads game resources and enters "Main Menu" state.
  */
 public class Splash extends BasicGameState {
 	/** Minimum time, in milliseconds, to display the splash screen (and fade in the logo). */
@@ -60,15 +58,15 @@ public class Splash extends BasicGameState {
 		Utils.init(container, game);
 
 		// fade in logo
-		this.logoAlpha = new AnimatedValue(MIN_SPLASH_TIME, 0f, 1f, AnimationEquation.OUT_CUBIC);
-		GameImage.MENU_LOGO.getImage().setAlpha(0f);
+		this.logoAlpha = new AnimatedValue(MIN_SPLASH_TIME, 0f, 1f, AnimationEquation.IN_QUAD);
+		GameImage.WELCOME.getImage().setAlpha(0f);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		g.setBackground(Color.black);
-		GameImage.MENU_LOGO.getImage().drawCentered(container.getWidth() / 2, container.getHeight() / 2);
+		GameImage.WELCOME.getImage().drawCentered(container.getWidth() / 2, container.getHeight() / 2);
 		if (!Options.isLoadProgressHidden())
 			UI.drawLoadingProgress(g);
 	}
@@ -100,7 +98,7 @@ public class Splash extends BasicGameState {
 
 		// fade in logo
 		if (logoAlpha.update(delta))
-			GameImage.MENU_LOGO.getImage().setAlpha(logoAlpha.getValue());
+			GameImage.WELCOME.getImage().setAlpha(logoAlpha.getValue());
 
 		// change states when loading complete
 		if (finished && logoAlpha.getValue() >= 1f) {
