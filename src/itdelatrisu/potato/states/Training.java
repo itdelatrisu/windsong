@@ -113,7 +113,7 @@ public class Training extends BasicGameState implements LeapListener {
 		UI.enter();
 		UI.getGamepad().reset();
 		MusicController.pause();
-		scoreData = new ScoreData();
+		scoreData = new ScoreData(container);
 		timeToNext = EVENT_INTERVAL;
 		time = 0;
 		soundPlayed = false;

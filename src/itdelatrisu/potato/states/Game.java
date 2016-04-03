@@ -68,6 +68,7 @@ public class Game extends BasicGameState implements LeapListener {
 			throws SlickException {
 		int width = container.getWidth(), height = container.getHeight();
 		UI.getGamepad().draw(g);
+		scoreData.drawGameElements(g);
 		UI.draw(g);
 	}
 
@@ -84,6 +85,7 @@ public class Game extends BasicGameState implements LeapListener {
 		}
 
 		int trackPosition = MusicController.getPosition();
+		scoreData.update(delta, trackPosition);
 
 		// is the game finished?
 		if (objectIndex >= map.objects.length) {
@@ -149,7 +151,7 @@ public class Game extends BasicGameState implements LeapListener {
 		if (map == null)
 			ErrorHandler.error("Starting game with no map.", null, false);
 		objectIndex = 0;
-		scoreData = new ScoreData();
+		scoreData = new ScoreData(container);
 		musicEnterTimer = MUSIC_ENTER_TIME;
 	}
 
