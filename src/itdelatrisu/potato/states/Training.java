@@ -27,16 +27,20 @@ import itdelatrisu.potato.ui.UI;
  * "Training" state.
  */
 public class Training extends BasicGameState implements LeapListener {
+	/** The score data instance. */
+	private ScoreData scoreData;
+
+	/** The interval between map hit objects, in ms. */
+	private static final int EVENT_INTERVAL = 2000;
+
+	private int timeToNext = EVENT_INTERVAL;
+	private int time = 0;
+
 	// game-related variables
 	private GameContainer container;
 	private StateBasedGame game;
 	private Input input;
-	private ScoreData scoreData;
 	private final int state;
-	
-	private static final int EVENT_INTERVAL = 2000;
-	private int timeToNext = EVENT_INTERVAL;
-	private int time = 0;
 	
 	public Training(int state) {
 		this.state = state;
@@ -48,7 +52,6 @@ public class Training extends BasicGameState implements LeapListener {
 		this.container = container;
 		this.game = game;
 		this.input = container.getInput();
-		this.scoreData = new ScoreData();
 
 		LeapController.addListener(this);
 	}
@@ -82,11 +85,11 @@ public class Training extends BasicGameState implements LeapListener {
 		time += delta;
 		timeToNext -= delta;
 		if (timeToNext < 0) {
-			int pos = (int) (Math.random()*9);
+			int pos = (int) (Math.random() * 9);
 			gp.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME);
 			HitObject hit = new HitObject(time + ScoreData.HIT_OBJECT_FADEIN_TIME, pos, HitObject.SOUND_CLAP);
 			scoreData.sendMapObject(hit);
-			
+
 			SoundController.playSound(SoundEffect.MENUCLICK);
 			timeToNext = EVENT_INTERVAL;
 		}
@@ -105,6 +108,9 @@ public class Training extends BasicGameState implements LeapListener {
 		UI.enter();
 		UI.getGamepad().reset();
 		MusicController.pause();
+		scoreData = new ScoreData();
+		timeToNext = EVENT_INTERVAL;
+		time = 0;
 	}
 
 	@Override
@@ -149,7 +155,7 @@ public class Training extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
-		scoreData.sendHit(pos, time);
-		UI.getGamepad().sendHit(pos, HitObject.SOUND_CLAP);
+		boolean isMapObjectHit = scoreData.sendHit(pos, time) != ScoreData.MISS;
+		UI.getGamepad().sendHit(pos, isMapObjectHit);
 	}
 }

@@ -5,8 +5,6 @@ import org.newdawn.slick.Image;
 
 import itdelatrisu.potato.ErrorHandler;
 import itdelatrisu.potato.GameImage;
-import itdelatrisu.potato.ScoreData;
-import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
 
@@ -106,15 +104,14 @@ public class Gamepad {
 	/**
 	 * Sends a hit at the given position.
 	 * @param pos the gamepad position
-	 * @param sound the hit sound
+	 * @param isMapObjectHit if this hit a map hit object
 	 */
-	public void sendHit(int pos, int sound) {
+	public void sendHit(int pos, boolean isMapObjectHit) {
 		checkBounds(pos);
 		hitValues[pos].setTime(0);
-		SoundController.playHitSound(sound);
 
 		// start fading out any map hit object immediately
-		if (mapObjectFadingIn[pos] && mapObjectValues[pos].getDuration() - mapObjectValues[pos].getTime() <= ScoreData.OKAY_TIME) {
+		if (isMapObjectHit && mapObjectFadingIn[pos]) {
 			mapObjectValues[pos] = new AnimatedValue(HIT_OBJECT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
 			mapObjectFadingIn[pos] = false;
 		}

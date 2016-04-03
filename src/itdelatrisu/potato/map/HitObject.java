@@ -30,8 +30,8 @@ public class HitObject {
 		this.sound = Integer.parseInt(tokens[2]);
 	}
 	
-	/*
-	 * Constructor
+	/**
+	 * Constructor.
 	 * @param time the sound track time at which to hit this object
 	 * @param position the grid position to hit
 	 * @param sound the sound to be played on hit
@@ -51,7 +51,7 @@ public class HitObject {
 	/**
 	 * Returns the position.
 	 */
-	public float getPosition() { return position; }
+	public int getPosition() { return position; }
 
 	/**
 	 * Returns the hit sound type.

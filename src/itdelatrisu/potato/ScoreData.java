@@ -1,5 +1,6 @@
 package itdelatrisu.potato;
 
+import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.map.HitObject;
 
 import java.util.ArrayList;
@@ -7,14 +8,14 @@ import java.util.ArrayList;
 public class ScoreData {
 		
 	// TODO: finalize these numbers
-	private static final int PERFECT_TIME = 50;
-	private static final int GOOD_TIME = 150;
+	public static final int PERFECT_TIME = 50;
+	public static final int GOOD_TIME = 150;
 	public static final int OKAY_TIME = 375;
 	
-	private static final int PERFECT_SCORE = 100;
-	private static final int GOOD_SCORE = 50;
-	private static final int OKAY_SCORE = 20;
-	private static final int MISS = 0;
+	public static final int PERFECT_SCORE = 100;
+	public static final int GOOD_SCORE = 50;
+	public static final int OKAY_SCORE = 20;
+	public static final int MISS = 0;
 	
 	public static final int HIT_OBJECT_FADEIN_TIME = 750;
 	
@@ -50,6 +51,10 @@ public class ScoreData {
 					points = MISS;
 
 				score += points;
+				
+				if (points != MISS)
+					SoundController.playHitSound(h.getSound());
+
 				toHit.remove(h);
 				return score;
 			}

@@ -42,6 +42,12 @@ public class PotatoMap implements Comparable<PotatoMap> {
 	public File getFile() { return file; }
 
 	/**
+	 * Returns the track end time (i.e. last hit object time).
+	 * @return the time, in ms
+	 */
+	public int getEndTime() { return objects[objects.length - 1].getTime(); }
+
+	/**
 	 * Compares two PotatoMap objects based on difficulty.
 	 */
 	@Override

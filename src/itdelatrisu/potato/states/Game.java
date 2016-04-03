@@ -11,13 +11,13 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.ErrorHandler;
+import itdelatrisu.potato.ScoreData;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
-import itdelatrisu.potato.map.HitObject;
 import itdelatrisu.potato.map.PotatoMap;
 import itdelatrisu.potato.ui.UI;
 
@@ -28,8 +28,8 @@ public class Game extends BasicGameState implements LeapListener {
 	/** Time before the music starts, in ms. */
 	private static final int MUSIC_ENTER_TIME = 1000;
 
-	/** Hit object fade-in time. */
-	private static final int HIT_OBJECT_FADEIN_TIME = 375;
+	/** Time before entering the ranking screen after the last hit object, in ms. */
+	private static final int MUSIC_END_TIME_DELAY = 2000;
 
 	/** Time left the music starts. */
 	private int musicEnterTimer;
@@ -39,6 +39,9 @@ public class Game extends BasicGameState implements LeapListener {
 
 	/** Current hit object index. */
 	private int objectIndex = 0;
+
+	/** The score data instance. */
+	private ScoreData scoreData;
 
 	// game-related variables
 	private GameContainer container;
@@ -79,7 +82,23 @@ public class Game extends BasicGameState implements LeapListener {
 				MusicController.playAt(0, false);
 			return;
 		}
-		
+
+		int trackPosition = MusicController.getPosition();
+
+		// is the game finished?
+		if (objectIndex >= map.objects.length) {
+			if (trackPosition >= map.getEndTime() + MUSIC_END_TIME_DELAY)
+				game.enterState(App.STATE_GAMERANKING, new EasedFadeOutTransition(), new FadeInTransition());
+			return;
+		}
+
+		// advance objectIndex
+		while (map.objects[objectIndex].getTime() - trackPosition <= ScoreData.HIT_OBJECT_FADEIN_TIME) {
+			scoreData.sendMapObject(map.objects[objectIndex]);
+			UI.getGamepad().sendMapObject(map.objects[objectIndex].getPosition(), map.objects[objectIndex].getTime() - trackPosition);
+			if (++objectIndex >= map.objects.length)
+				break;
+		}
 	}
 
 	@Override
@@ -130,6 +149,7 @@ public class Game extends BasicGameState implements LeapListener {
 		if (map == null)
 			ErrorHandler.error("Starting game with no map.", null, false);
 		objectIndex = 0;
+		scoreData = new ScoreData();
 		musicEnterTimer = MUSIC_ENTER_TIME;
 	}
 
@@ -149,6 +169,7 @@ public class Game extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
-		UI.getGamepad().sendHit(pos, HitObject.SOUND_CLAP);  // TODO: send hit object sound
+		boolean isMapObjectHit = scoreData.sendHit(pos, MusicController.getPosition()) != ScoreData.MISS;
+		UI.getGamepad().sendHit(pos, isMapObjectHit);
 	}
 }
