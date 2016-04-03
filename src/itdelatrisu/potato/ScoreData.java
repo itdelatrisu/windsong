@@ -38,11 +38,11 @@ public class ScoreData {
 	
 	/** Grade percentage requirements */
 	public static final float
-		REQ_S = 0.90f,
-		REQ_A = 0.85f,
-		REQ_B = 0.7f,
-		REQ_C = 0.55f,
-		REQ_D = 0.4f;	
+		REQ_S = 90f,
+		REQ_A = 85f,
+		REQ_B = 70f,
+		REQ_C = 55f,
+		REQ_D = 40f;	
 	
 	/** Hit object fade-in time, in ms. */
 	public static final int HIT_OBJECT_FADEIN_TIME = 750;
