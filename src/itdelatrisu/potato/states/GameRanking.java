@@ -1,6 +1,5 @@
 package itdelatrisu.potato.states;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -17,7 +16,6 @@ import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.audio.SoundEffect;
-import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.UI;
 
 /**
@@ -48,12 +46,7 @@ public class GameRanking extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		g.drawImage(GameImage.BACKGROUND.getImage(), 0, 0);
-		int width = container.getWidth(), height = container.getHeight();
-		Fonts.LARGE.drawString(width / 10, height / 2 - Fonts.LARGE.getLineHeight() / 2, "Scorecard", Color.white);
-
 		scoreData.drawScoreScreen();
-		
-		UI.getBackButton().draw();
 		UI.draw(g);
 	}
 
@@ -61,8 +54,6 @@ public class GameRanking extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		UI.update(delta);
-		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
-		UI.getBackButton().hoverUpdate(delta, mouseX, mouseY);
 	}
 	
 	/**
@@ -97,12 +88,9 @@ public class GameRanking extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (UI.getBackButton().contains(x, y)) {
-			SoundController.playSound(SoundEffect.MENUBACK);
-			MusicController.playAt(0, true);
-			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
-			return;
-		}
+		SoundController.playSound(SoundEffect.MENUBACK);
+		MusicController.playAt(0, true);
+		game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 	}
 
 	@Override
@@ -110,7 +98,6 @@ public class GameRanking extends BasicGameState {
 			throws SlickException {
 		UI.enter();
 		SoundController.playSound(SoundEffect.APPLAUSE);
-		UI.getBackButton().resetHover();
 	}
 
 	@Override
