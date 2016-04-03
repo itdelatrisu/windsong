@@ -12,6 +12,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.potato.App;
 import itdelatrisu.potato.GameImage;
+import itdelatrisu.potato.ScoreData;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.audio.SoundController;
@@ -28,6 +29,8 @@ public class GameRanking extends BasicGameState {
 	private StateBasedGame game;
 	private final int state;
 	private Input input;
+	
+	private ScoreData scoreData;
 
 	public GameRanking(int state) {
 		this.state = state;
@@ -48,9 +51,7 @@ public class GameRanking extends BasicGameState {
 		int width = container.getWidth(), height = container.getHeight();
 		Fonts.LARGE.drawString(width / 10, height / 2 - Fonts.LARGE.getLineHeight() / 2, "Scorecard", Color.white);
 
-		// TODO
-		// - Show score/stats:
-		//
+		scoreData.drawScoreScreen();
 		
 		UI.getBackButton().draw();
 		UI.draw(g);
@@ -62,6 +63,14 @@ public class GameRanking extends BasicGameState {
 		UI.update(delta);
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
 		UI.getBackButton().hoverUpdate(delta, mouseX, mouseY);
+	}
+	
+	/**
+	 * Sets the score data for the score screen.
+	 * @param scoreData the score data
+	 */
+	public void setScoreData(ScoreData scoreData) {
+		this.scoreData = scoreData;
 	}
 
 	@Override
