@@ -5,14 +5,13 @@ wrappers around the OpenGL and OpenAL libraries, and runs on Windows, OS X, and
 Linux platforms.  It uses the [Leap Motion](https://www.leapmotion.com/)
 controller for input.
 
-## Getting Started
-TODO
+Windsong requires maps and songs to run (with extension `.wind`).  The format
+is similar to that of osu! beatmaps, and a converter from osu! to Windsong
+maps can be found at [itdelatrisu/windsong-converter](https://github.com/itdelatrisu/windsong-converter).
 
 ## Building
-Windsong is distributed as a [Maven](https://maven.apache.org/) project.
-
-### Maven
-Maven builds are built to the `target` directory.
+Windsong is distributed as a [Maven](https://maven.apache.org/) project, and
+builds are built to the `target` directory.
 * To run the project, execute the Maven goal `compile`.
 * To create a single executable jar, execute the Maven goal `package -Djar`.
   This will compile a jar to `target/windsong-${version}.jar` with the libraries,
@@ -27,4 +26,6 @@ with `leap-platform-1.0.0-natives-(windows|linux).x86.jar` in the local Maven
 repository (`repo/com/leapmotion/leap-platform/1.0.0/`).
 
 ## Credits
-This work is based on [opsu!](https://github.com/itdelatrisu/opsu).
+This work is based on [opsu!](https://github.com/itdelatrisu/opsu), and was
+written during HackPrinceton Spring 2016 with Karen Ouyang (@kouyang) and
+Davis Liu (@liuquinlin).
