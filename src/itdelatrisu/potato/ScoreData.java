@@ -52,6 +52,12 @@ public class ScoreData {
 	/** Displayed game score percent (for animation, slightly behind score percent). */
 	private float scorePercentDisplay;
 
+	/** Current health bar percentage. */
+	private float health = 100f;
+
+	/** Displayed health (for animation, slightly behind health). */
+	private float healthDisplay = 0f;
+
 	/** Score text symbol images. */
 	private HashMap<Character, Image> scoreSymbols;
 
@@ -158,6 +164,7 @@ public class ScoreData {
 	 */
 	public void drawGameElements(Graphics g) {
 		int margin = (int) (width * 0.008f);
+		float uiScale = GameImage.getUIscale();
 
 		// score
 		drawFixedSizeSymbolString((scoreDisplay < 100000000) ? String.format("%08d", scoreDisplay) : Long.toString(scoreDisplay),
@@ -168,6 +175,26 @@ public class ScoreData {
 		drawSymbolString(
 			String.format((scorePercentDisplay < 10f) ? "0%.2f%%" : "%.2f%%", scorePercentDisplay),
 			width - margin, symbolHeight, 0.60f, 1f, true);
+
+		// scorebar
+		float healthRatio = healthDisplay / 100f;
+		Image scorebar = GameImage.SCOREBAR_BG.getImage();
+		Image colour = GameImage.SCOREBAR_COLOUR.getImage();
+		float colourX = 4 * uiScale, colourY = 15 * uiScale;
+		Image colourCropped = colour.getSubImage(0, 0, (int) (645 * uiScale * healthRatio), colour.getHeight());
+		scorebar.setAlpha(1f);
+		scorebar.draw(0, 0);
+		colourCropped.draw(colourX, colourY);
+		Image ki = null;
+		if (health >= 50f)
+			ki = GameImage.SCOREBAR_KI.getImage();
+		else if (health >= 25f)
+			ki = GameImage.SCOREBAR_KI_DANGER.getImage();
+		else
+			ki = GameImage.SCOREBAR_KI_DANGER2.getImage();
+		if (comboPopTime < COMBO_POP_TIME)
+			ki = ki.getScaledCopy(1f + (0.45f * (1f - (float) comboPopTime / COMBO_POP_TIME)));
+		ki.drawCentered(colourX + colourCropped.getWidth(), colourY);
 
 		// combo count
 		if (combo > 0) {
@@ -180,6 +207,15 @@ public class ScoreData {
 			drawSymbolString(comboString, margin, height - margin - (symbolHeight * comboPopFront), comboPopFront, 1f, false);
 		}
 	}
+
+	/** Returns the current health percentage. */
+	public float getHealth() { return health; }
+
+	/**
+	 * Changes health by a given percentage.
+	 * @param percent the health percentage
+	 */
+	public void changeHealth(float percent) { health = Utils.clamp(health + percent, 0f, 100f); }
 
 	/** Returns the current score. */
 	public long getScore() { return score; }
@@ -253,15 +289,18 @@ public class ScoreData {
 				if (timeDiff < PERFECT_TIME) {
 					points = PERFECT_SCORE;
 					hitPerfect++;
+					changeHealth(5f);
 				} else if (timeDiff < GOOD_TIME) {
 					points = GOOD_SCORE;
 					hitGood++;
+					changeHealth(2f);
 				} else if (timeDiff < OKAY_TIME) {
 					points = OKAY_SCORE;
 					hitOkay++;
 				} else {
 					points = MISS;
 					hitMiss++;
+					changeHealth(-5f);
 					resetComboStreak();
 				}
 
@@ -302,6 +341,7 @@ public class ScoreData {
 
 			// count misses and break combo
 			hitMiss += toRemove.size();
+			changeHealth(-5f * toRemove.size());
 			resetComboStreak();
 		}
 
@@ -323,6 +363,23 @@ public class ScoreData {
 				scorePercentDisplay -= (scorePercentDisplay - scorePercent) * delta / 50f + 0.01f;
 				if (scorePercentDisplay < scorePercent)
 					scorePercentDisplay = scorePercent;
+			}
+		}
+
+		// drain health...
+		changeHealth(-delta / 200f);
+
+		// health display
+		if (healthDisplay != health) {
+			float shift = delta / 15f;
+			if (healthDisplay < health) {
+				healthDisplay += shift;
+				if (healthDisplay > health)
+					healthDisplay = health;
+			} else {
+				healthDisplay -= shift;
+				if (healthDisplay < health)
+					healthDisplay = health;
 			}
 		}
 

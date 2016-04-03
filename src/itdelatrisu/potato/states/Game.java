@@ -77,6 +77,12 @@ public class Game extends BasicGameState implements LeapListener {
 			throws SlickException {
 		UI.update(delta);
 		UI.getGamepad().update(delta);
+		int trackPosition = MusicController.getPosition();
+
+		// update score data
+		scoreData.update(delta, trackPosition);
+
+		// delay before music starts
 		if (musicEnterTimer > 0) {
 			musicEnterTimer -= delta;
 			if (musicEnterTimer <= 0)
@@ -84,14 +90,17 @@ public class Game extends BasicGameState implements LeapListener {
 			return;
 		}
 
-		int trackPosition = MusicController.getPosition();
-		scoreData.update(delta, trackPosition);
-
 		// is the game finished?
 		if (objectIndex >= map.objects.length) {
 			if (trackPosition >= map.getEndTime() + MUSIC_END_TIME_DELAY)
 				game.enterState(App.STATE_GAMERANKING, new EasedFadeOutTransition(), new FadeInTransition());
 			return;
+		}
+
+		// dead?
+		if (scoreData.getHealth() < 1f) {
+			// TODO
+			// game over :(
 		}
 
 		// advance objectIndex
