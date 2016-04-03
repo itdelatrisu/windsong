@@ -164,9 +164,7 @@ public class Utils {
 	 * @return true if pressed
 	 */
 	public static boolean isGameKeyPressed() {
-		boolean mouseDown = !Options.isMouseDisabled() && (
-				input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) ||
-				input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON));
+		boolean mouseDown = input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON);
 		return (mouseDown ||
 				input.isKeyDown(Options.getGameKeyLeft()) ||
 				input.isKeyDown(Options.getGameKeyRight()));

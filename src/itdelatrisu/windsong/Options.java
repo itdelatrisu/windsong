@@ -232,7 +232,7 @@ public class Options {
 			}
 		},
 		LOAD_VERBOSE ("Show Detailed Loading Progress", "LoadVerbose", "Display more specific loading information in the splash screen.", false),
-		MASTER_VOLUME ("Master Volume", "VolumeUniversal", "Global volume level.", 35, 0, 100) {
+		MASTER_VOLUME ("Master Volume", "VolumeUniversal", "Global volume level.", 50, 0, 100) {
 			@Override
 			public void drag(GameContainer container, int d) {
 				super.drag(container, d);
@@ -247,7 +247,7 @@ public class Options {
 			}
 		},
 		EFFECT_VOLUME ("Effect Volume", "VolumeEffect", "Volume of menu and game sounds.", 70, 0, 100),
-		HITSOUND_VOLUME ("Hit Sound Volume", "VolumeHitSound", "Volume of hit sounds.", 30, 0, 100),
+		HITSOUND_VOLUME ("Hit Sound Volume", "VolumeHitSound", "Volume of hit sounds.", 90, 0, 100),
 		MUSIC_OFFSET ("Music Offset", "Offset", "Adjust this value if hit objects are out of sync.", -75, -500, 500) {
 			@Override
 			public String getValueString() { return String.format("%dms", val); }
@@ -274,14 +274,12 @@ public class Options {
 			@Override
 			public void read(String s) { setGameKeyRight(Keyboard.getKeyIndex(s)); }
 		},
-		DISABLE_MOUSE_WHEEL ("Disable mouse wheel in play mode", "MouseDisableWheel", "During play, you can use the mouse wheel to adjust the volume and pause the game.\nThis will disable that functionality.", false),
-		DISABLE_MOUSE_BUTTONS ("Disable mouse buttons in play mode", "MouseDisableButtons", "This option will disable all mouse buttons.\nSpecifically for people who use their keyboard to click.", false),
 		BACKGROUND_DIM ("Background Dim", "DimLevel", "Percentage to dim the background image during gameplay.", 50, 0, 100),
 		IGNORE_MAP_SKINS ("Ignore All Map Skins", "IgnoremapSkins", "Never use skin element overrides provided by maps.", false),
-		SHOW_HIT_LIGHTING ("Show Hit Lighting", "HitLighting", "Adds an effect behind hit explosions.", true),
-		SHOW_PERFECT_HIT ("Show Perfect Hits", "PerfectHit", "Whether to show perfect hit result bursts (300s, slider ticks).", true),
 		LOAD_HD_IMAGES ("Load HD Images", "LoadHDImages", String.format("Loads HD (%s) images when available. Increases memory usage and loading times.", GameImage.HD_SUFFIX), true),
-		ENABLE_THEME_SONG ("Enable Theme Song", "MenuMusic", "Whether to play the theme song upon starting the game.", true);
+		ENABLE_THEME_SONG ("Enable Theme Song", "MenuMusic", "Whether to play the theme song upon starting the game.", true),
+		NO_FAIL ("No Fail", "NoFail", "Whether to disable failing songs.", false),
+		HIDE_LOADING_PROGRESS ("Hide Loading Progress", "HideLoadingProgress", "Whether to hide loading progress on the splash screen.", true);
 
 		/** Option name. */
 		private final String name;
@@ -649,22 +647,10 @@ public class Options {
 	public static boolean isFPSCounterEnabled() { return GameOption.SHOW_FPS.getBooleanValue(); }
 
 	/**
-	 * Returns whether or not hit lighting effects are enabled.
-	 * @return true if enabled
-	 */
-	public static boolean isHitLightingEnabled() { return GameOption.SHOW_HIT_LIGHTING.getBooleanValue(); }
-
-	/**
 	 * Returns the port number to bind to.
 	 * @return the port
 	 */
 	public static int getPort() { return port; }
-
-	/**
-	 * Returns whether or not to show perfect hit result bursts.
-	 * @return true if enabled
-	 */
-	public static boolean isPerfectHitBurstEnabled() { return GameOption.SHOW_PERFECT_HIT.getBooleanValue(); }
 
 	/**
 	 * Returns the background dim level.
@@ -701,28 +687,6 @@ public class Options {
 	 * @return true if HD images are enabled, false if only SD images should be loaded
 	 */
 	public static boolean loadHDImages() { return GameOption.LOAD_HD_IMAGES.getBooleanValue(); }
-
-	/**
-	 * Returns whether or not the mouse wheel is disabled during gameplay.
-	 * @return true if disabled
-	 */
-	public static boolean isMouseWheelDisabled() { return GameOption.DISABLE_MOUSE_WHEEL.getBooleanValue(); }
-
-	/**
-	 * Returns whether or not the mouse buttons are disabled during gameplay.
-	 * @return true if disabled
-	 */
-	public static boolean isMouseDisabled() { return GameOption.DISABLE_MOUSE_BUTTONS.getBooleanValue(); }
-
-	/**
-	 * Toggles the mouse button enabled/disabled state during gameplay and
-	 * sends a bar notification about the action.
-	 */
-	public static void toggleMouseDisabled() {
-		GameOption.DISABLE_MOUSE_BUTTONS.click(null);
-		UI.sendBarNotification((GameOption.DISABLE_MOUSE_BUTTONS.getBooleanValue()) ?
-			"Mouse buttons are disabled." : "Mouse buttons are enabled.");
-	}
 
 	/**
 	 * Returns the left game key.
@@ -782,6 +746,18 @@ public class Options {
 		        key != Keyboard.KEY_UP && key != Keyboard.KEY_DOWN &&
 		        key != Keyboard.KEY_F7 && key != Keyboard.KEY_F10 && key != Keyboard.KEY_F12);
 	}
+
+	/**
+	 * Returns whether or not game failure is disabled.
+	 * @return true if disabled
+	 */
+	public static boolean isNoFail() { return GameOption.NO_FAIL.getBooleanValue(); }
+
+	/**
+	 * Returns whether or not all loading progress is hidden.
+	 * @return true if disabled
+	 */
+	public static boolean isLoadProgressHidden() { return GameOption.HIDE_LOADING_PROGRESS.getBooleanValue(); }
 
 	/**
 	 * Returns the map directory.

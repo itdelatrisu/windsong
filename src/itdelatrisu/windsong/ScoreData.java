@@ -355,21 +355,22 @@ public class ScoreData {
 					points = PERFECT_SCORE;
 					hitPerfect++;
 					lastHitResult = GameImage.HIT_PERFECT;
-					changeHealth(5f);
+					changeHealth(10f);
 				} else if (timeDiff < GOOD_TIME) {
 					points = GOOD_SCORE;
 					hitGood++;
 					lastHitResult = GameImage.HIT_GOOD;
-					changeHealth(2f);
+					changeHealth(5f);
 				} else if (timeDiff < OKAY_TIME) {
 					points = OKAY_SCORE;
 					hitOkay++;
 					lastHitResult = GameImage.HIT_OK;
+					changeHealth(1f);
 				} else {
 					points = MISS;
 					hitMiss++;
 					lastHitResult = GameImage.HIT_MISS;
-					changeHealth(-3f);
+					changeHealth(-2f);
 					resetComboStreak();
 				}
 				lastHitResultValue.setTime(0);
@@ -414,7 +415,7 @@ public class ScoreData {
 
 			// count misses and break combo
 			hitMiss += toRemove.size();
-			changeHealth(-3f * toRemove.size());
+			changeHealth(-2f * toRemove.size());
 			resetComboStreak();
 			lastHitResult = GameImage.HIT_MISS;
 			lastHitResultValue.setTime(0);

@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.windsong.App;
 import itdelatrisu.windsong.ErrorHandler;
+import itdelatrisu.windsong.Options;
 import itdelatrisu.windsong.ScoreData;
 import itdelatrisu.windsong.Utils;
 import itdelatrisu.windsong.audio.MusicController;
@@ -109,7 +110,7 @@ public class Game extends BasicGameState implements LeapListener {
 		}
 
 		// dead?
-		if (scoreData.getHealth() < 1f) {
+		if (scoreData.getHealth() < 1f && !Options.isNoFail()) {
 			MusicController.fadeOut(MUSIC_FADEOUT_TIME);
 			game.enterState(App.STATE_GAMEOVER, new EasedFadeOutTransition(), new FadeInTransition());
 			return;
