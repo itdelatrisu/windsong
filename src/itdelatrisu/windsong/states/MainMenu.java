@@ -19,8 +19,8 @@ import itdelatrisu.windsong.Utils;
 import itdelatrisu.windsong.audio.MusicController;
 import itdelatrisu.windsong.audio.SoundController;
 import itdelatrisu.windsong.audio.SoundEffect;
-import itdelatrisu.windsong.map.MapParser;
 import itdelatrisu.windsong.map.MapFile;
+import itdelatrisu.windsong.map.MapParser;
 import itdelatrisu.windsong.ui.Colors;
 import itdelatrisu.windsong.ui.Fonts;
 import itdelatrisu.windsong.ui.KineticScrolling;
@@ -31,10 +31,11 @@ import itdelatrisu.windsong.ui.animations.AnimationEquation;
 
 /**
  * "Main Menu" state.
- * <p>
- * Players are able to enter the song menu or downloads menu from this state.
  */
 public class MainMenu extends BasicGameState {
+	/** Initial fade-in times. */
+	private static final int WELCOME_SHOW_TIME = 1500, WELCOME_FADE_TIME = 1000, ENTER_TIME = 1250;
+
 	/** Delay time, in milliseconds, for double-clicking focused result. */
 	private static final int FOCUS_DELAY = 250;
 
@@ -56,11 +57,17 @@ public class MainMenu extends BasicGameState {
 	/** Maximum number of listings to display on one screen. */
 	private int maxResultsShown;
 
-	/** Background alpha level (for fade-in effect). */
-	private AnimatedValue bgAlpha = new AnimatedValue(1100, 0f, 0.9f, AnimationEquation.LINEAR);
-
 	/** The petal stream. */
 	private PetalStream[] petalStreams;
+
+	/** States (for the initial loading). */
+	private enum State { INITIAL, FADE_OUT, FADE_IN, FINAL }
+
+	/** Current state. */
+	private State currentState = State.INITIAL;
+
+	/** State transition timer. */
+	private AnimatedValue stateTimer = new AnimatedValue(WELCOME_SHOW_TIME, 0f, 1f, AnimationEquation.LINEAR);
 
 	// game-related variables
 	private GameContainer container;
@@ -84,7 +91,7 @@ public class MainMenu extends BasicGameState {
 
 		// map listing coordinates/dimensions
 		buttonBaseX = width * 0.04f;
-		buttonBaseY = height * 0.2f;
+		buttonBaseY = height * 0.07f + GameImage.MENU_LOGO.getImage().getHeight() + Fonts.MEDIUM.getLineHeight();
 		buttonWidth = width - buttonBaseX * 1.98f;
 		buttonHeight = Fonts.MEDIUM.getLineHeight() * 2.1f;
 		buttonOffset = buttonHeight * 1.1f;
@@ -101,7 +108,20 @@ public class MainMenu extends BasicGameState {
 			throws SlickException {
 		int width = container.getWidth(), height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
-		boolean inDropdownMenu = false;  // TODO?
+
+		// initial load
+		if (currentState == State.INITIAL || currentState == State.FADE_OUT) {
+			// petal stream
+			for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
+				petalStreams[i].draw();
+
+			if (currentState == State.FADE_OUT)
+				GameImage.WELCOME.getImage().setAlpha(stateTimer.getValue());
+			GameImage.WELCOME.getImage().drawCentered(width / 2, height / 2);
+
+			UI.draw(g);
+			return;
+		}
 
 		List<MapFile> maps = MapParser.getMaps();
 		int numMaps = maps.size();
@@ -109,7 +129,7 @@ public class MainMenu extends BasicGameState {
 
 		// background
 		Image bg = GameImage.BACKGROUND.getImage().copy();
-		bg.setAlpha(bgAlpha.getValue());
+		bg.setAlpha(stateTimer.getValue());
 		bg.draw();
 
 		// petal stream
@@ -117,20 +137,23 @@ public class MainMenu extends BasicGameState {
 			petalStreams[i].draw();
 
 		// title
-		float textY = height * 0.03f;
-		Fonts.XLARGE.drawString(buttonBaseX, textY, "Windsong", Color.white);
-		textY += Fonts.XLARGE.getLineHeight() + height * 0.01f;
+		float textY = height * 0.04f;
+		Image logo = GameImage.MENU_LOGO.getImage();
+		logo.setAlpha(stateTimer.getValue());
+		logo.drawCentered(width / 2, textY + logo.getHeight() / 2);
+		textY += logo.getHeight() + height * 0.01f;
+		Color color = new Color(1f, 1f, 1f, stateTimer.getValue());
 		if (focusMap != null) {
 			String s1 = "You've selected ", s2 = " by ", s3 = ".";
 			float offsetS1 = Fonts.MEDIUM.getWidth(s1), offsetS2 = Fonts.MEDIUM.getWidth(s2);
 			float offsetTitle = Fonts.MEDIUMBOLD.getWidth(focusMap.title), offsetArtist = Fonts.MEDIUMBOLD.getWidth(focusMap.artist);
-			Fonts.MEDIUM.drawString(buttonBaseX, textY, s1);
-			Fonts.MEDIUMBOLD.drawString(buttonBaseX + offsetS1, textY, focusMap.title);
-			Fonts.MEDIUM.drawString(buttonBaseX + offsetS1 + offsetTitle, textY, s2);
-			Fonts.MEDIUMBOLD.drawString(buttonBaseX + offsetS1 + offsetTitle + offsetS2, textY, focusMap.artist);
-			Fonts.MEDIUM.drawString(buttonBaseX + offsetS1 + offsetTitle + offsetS2 + offsetArtist, textY, s3);
+			Fonts.MEDIUM.drawString(buttonBaseX, textY, s1, color);
+			Fonts.MEDIUMBOLD.drawString(buttonBaseX + offsetS1, textY, focusMap.title, color);
+			Fonts.MEDIUM.drawString(buttonBaseX + offsetS1 + offsetTitle, textY, s2, color);
+			Fonts.MEDIUMBOLD.drawString(buttonBaseX + offsetS1 + offsetTitle + offsetS2, textY, focusMap.artist, color);
+			Fonts.MEDIUM.drawString(buttonBaseX + offsetS1 + offsetTitle + offsetS2 + offsetArtist, textY, s3, color);
 		} else
-			Fonts.MEDIUM.drawString(buttonBaseX, textY, "Select a song and press space to begin.");
+			Fonts.MEDIUM.drawString(buttonBaseX, textY, "Select a song and press space to begin.", color);
 
 		// map listing
 		clipToResultArea(g);
@@ -143,13 +166,12 @@ public class MainMenu extends BasicGameState {
 			if (index >= numMaps)
 				break;
 			drawResult(g, maps.get(index), offset + i * buttonOffset,
-					resultContains(mouseX, mouseY - offset, i) && !inDropdownMenu,
-					(index == focusIndex));
+					resultContains(mouseX, mouseY - offset, i), (index == focusIndex), stateTimer.getValue());
 		}
 		g.clearClip();
 		if (numMaps > maxResultsShown)
 			drawResultScrollbar(g, startResultPos.getPosition(), numMaps * buttonOffset);
-		
+
 		UI.draw(g);
 	}
 
@@ -157,13 +179,28 @@ public class MainMenu extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		UI.update(delta);
-		bgAlpha.update(delta);
+		for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
+			petalStreams[i].update(delta);
+
+		// initial load
+		if (currentState != State.FINAL) {
+			if (!stateTimer.update(delta)) {
+				if (currentState == State.INITIAL) {
+					currentState = State.FADE_OUT;
+					stateTimer = new AnimatedValue(WELCOME_FADE_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
+				} else if (currentState == State.FADE_OUT) {
+					currentState = State.FADE_IN;
+					stateTimer = new AnimatedValue(ENTER_TIME, 0f, 1f, AnimationEquation.OUT_QUAD);
+				} else
+					currentState = State.FINAL;
+			}
+			return;
+		}
+
 		startResultPos.setMinMax(0, buttonOffset * (MapParser.getMaps().size() - maxResultsShown));
 		startResultPos.update(delta);
 		if (focusIndex != -1 && focusTimer < FOCUS_DELAY)
 			focusTimer += delta;
-		for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
-			petalStreams[i].update(delta);
 	}
 
 	@Override
@@ -182,11 +219,15 @@ public class MainMenu extends BasicGameState {
 	@Override
 	public void leave(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		
+		currentState = State.FINAL;
+		stateTimer.setTime(stateTimer.getDuration());
 	}
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
+		if (currentState != State.FINAL)
+			return;
+
 		// map listing
 		List<MapFile> maps = MapParser.getMaps();
 		int numMaps = maps.size();
@@ -216,7 +257,10 @@ public class MainMenu extends BasicGameState {
 				}
 			}
 		}
+
+		// else unselect and play theme song
 		focusIndex = -1;
+		MusicController.playThemeSong();
 	}
 
 	@Override
@@ -255,6 +299,8 @@ public class MainMenu extends BasicGameState {
 			break;
 		case Input.KEY_SPACE:
 		case Input.KEY_ENTER:
+			if (currentState != State.FINAL)
+				return;
 			if (focusIndex != -1)
 				game.enterState(App.STATE_TRAINING, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
@@ -315,31 +361,38 @@ public class MainMenu extends BasicGameState {
 	 * @param position the index (to offset the button from the topmost button)
 	 * @param hover true if the mouse is hovering over this button
 	 * @param focus true if the button is focused
+	 * @param alpha the alpha level multiplier
 	 */
-	private void drawResult(Graphics g, MapFile map, float position, boolean hover, boolean focus) {
+	private void drawResult(Graphics g, MapFile map, float position, boolean hover, boolean focus, float alpha) {
 		float textX = buttonBaseX + buttonWidth * 0.001f;
 		float edgeX = buttonBaseX + buttonWidth * 0.985f;
 		float y = buttonBaseY + position;
 		float marginY = buttonHeight * 0.04f;
 
 		// rectangle outline
-		g.setColor((focus) ? Colors.BLACK_BG_FOCUS : (hover) ? Colors.BLACK_BG_HOVER : Colors.BLACK_BG_NORMAL);
+		Color c = (focus) ? Colors.BLACK_BG_FOCUS : (hover) ? Colors.BLACK_BG_HOVER : Colors.BLACK_BG_NORMAL;
+		float oldAlpha = c.a;
+		c.a *= alpha;
+		g.setColor(c);
 		g.fillRect(buttonBaseX, y, buttonWidth, buttonHeight);
+		c.a = oldAlpha;
 
 		// grade? (TODO)
-		Image grade = GameImage.MUSIC_PLAY.getImage(); // TODO
-		grade.drawCentered(textX + grade.getWidth() / 2, y + buttonHeight / 2f);
-		textX += grade.getWidth() + buttonWidth * 0.001f;
+		Image img = GameImage.MUSIC_PLAY.getImage().copy(); // TODO
+		img.setAlpha(alpha);
+		img.drawCentered(textX + img.getWidth() / 2, y + buttonHeight / 2f);
+		textX += img.getWidth() + buttonWidth * 0.001f;
 
 		// text
+		Color color = new Color(1f, 1f, 1f, alpha);
 		Fonts.BOLD.drawString(
 				textX, y + marginY,
-				String.format("%s - %s", map.artist, map.title), Color.white);
+				String.format("%s - %s", map.artist, map.title), color);
 		Fonts.DEFAULT.drawString(
 				textX, y + marginY + Fonts.BOLD.getLineHeight(),
-				String.format("Difficulty: %s", map.getDifficulty()), Color.white);
+				String.format("Difficulty: %s", map.getDifficulty()), color);
 		Fonts.DEFAULT.drawString(
 				edgeX - Fonts.DEFAULT.getWidth(map.creator), y + marginY,
-				map.creator, Color.white);
+				map.creator, color);
 	}
 }

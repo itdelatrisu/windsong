@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.EasedFadeOutTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.windsong.App;
+import itdelatrisu.windsong.GameImage;
 import itdelatrisu.windsong.ScoreData;
 import itdelatrisu.windsong.Utils;
 import itdelatrisu.windsong.audio.MusicController;
@@ -66,19 +67,22 @@ public class Training extends BasicGameState implements LeapListener {
 			throws SlickException {
 		int width = container.getWidth(), height = container.getHeight();
 
+		// background
+		GameImage.BACKGROUND.getImage().draw();
+
 		// show gamepad
 		UI.getGamepad().draw(g);
 
 		// last hit result
 		scoreData.drawLastHitResult(g);
 
-		// text	
+		// text
 		float textY = height * 0.03f;
 		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
 		textY += height * 0.01f + Fonts.XLARGE.getLineHeight();
 		Fonts.MEDIUM.drawString(width * 0.04f, textY, "Hit the illuminated square when the pattern is fully visible.");
 		textY += Fonts.MEDIUM.getLineHeight() * 1.1f;
-		Fonts.MEDIUM.drawString(width * 0.04f, textY, "When you are ready, press space or click anywhere to continue.");
+		Fonts.MEDIUM.drawString(width * 0.04f, textY, "When you're ready, click or press space to continue.");
 
 		UI.draw(g);
 	}

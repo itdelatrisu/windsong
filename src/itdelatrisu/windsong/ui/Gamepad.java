@@ -84,8 +84,6 @@ public class Gamepad implements LeapListener {
 	 * @param g the graphics context
 	 */
 	public void draw(Graphics g) {
-		Image bg = GameImage.BACKGROUND.getImage();
-		bg.draw();
 		for (int i = 0; i < GAMEPAD_BUTTONS; i++) {
 			float mapObjectAlpha = mapObjectValues[i].getValue();
 			if (mapObjectAlpha != 0f) {

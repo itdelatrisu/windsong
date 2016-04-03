@@ -200,22 +200,15 @@ public enum GameImage {
 	HIT_OK ("hit-ok", "png"),
 	HIT_GOOD ("hit-good", "png"),
 	HIT_PERFECT ("hit-perfect", "png"),
-	RANKING_SS ("ranking-X", "png"),
-	RANKING_SS_SMALL ("ranking-X-small", "png"),
-	RANKING_SSH ("ranking-XH", "png"),
-	RANKING_SSH_SMALL ("ranking-XH-small", "png"),
+	SCORECARD_LABEL ("scorecard", "png"),
+	SCORECARD_ACCURACY ("scorecard-accuracy", "png"),
+	SCORECARD_MAX_COMBO ("scorecard-max-combo", "png"),
 	RANKING_S ("ranking-S", "png"),
-	RANKING_S_SMALL ("ranking-S-small", "png"),
-	RANKING_SH ("ranking-SH", "png"),
-	RANKING_SH_SMALL ("ranking-SH-small", "png"),
 	RANKING_A ("ranking-A", "png"),
-	RANKING_A_SMALL ("ranking-A-small", "png"),
 	RANKING_B ("ranking-B", "png"),
-	RANKING_B_SMALL ("ranking-B-small", "png"),
 	RANKING_C ("ranking-C", "png"),
-	RANKING_C_SMALL ("ranking-C-small", "png"),
 	RANKING_D ("ranking-D", "png"),
-	RANKING_D_SMALL ("ranking-D-small", "png"),
+	RANKING_F ("ranking-F", "png"),
 	RANKING_PANEL ("ranking-panel", "png"),
 	RANKING_PERFECT ("ranking-perfect", "png"),
 	RANKING_TITLE ("ranking-title", "png"),
@@ -286,12 +279,15 @@ public enum GameImage {
 	MENU_LOGO ("logo", "png", false, true) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy(0.8f);
+			return img.getScaledCopy((h * 0.15f) / img.getHeight());
 		}
 	},
-	MENU_BUTTON_MID ("button-middle", "png", false, false),
-	MENU_BUTTON_LEFT ("button-left", "png", false, false),
-	MENU_BUTTON_RIGHT ("button-right", "png", false, false),
+	WELCOME ("welcome", "png", false, true) {
+		@Override
+		protected Image process_sub(Image img, int w, int h) {
+			return img.getScaledCopy((w * 0.7f) / img.getWidth());
+		}
+	},
 	REPOSITORY ("repo", "png", false, false) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {

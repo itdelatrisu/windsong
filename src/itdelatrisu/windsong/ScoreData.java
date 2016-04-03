@@ -470,7 +470,7 @@ public class ScoreData {
 	 * Draws the scoring information to the screen.
 	 */
 	public void drawScoreScreen() {
-		float xUnit = width / 2f / 3f;
+		float xUnit = width * 2f / 3f / 6f;
 		float yUnit = height / 14f;
 		
 		GameImage rankingImage;
@@ -479,43 +479,42 @@ public class ScoreData {
 		else if (ranking == GRADE_A) rankingImage = GameImage.RANKING_A;
 		else if (ranking == GRADE_B) rankingImage = GameImage.RANKING_B;
 		else if (ranking == GRADE_C) rankingImage = GameImage.RANKING_C;
-		else rankingImage = GameImage.RANKING_D;
+		else if (ranking == GRADE_D) rankingImage = GameImage.RANKING_D;
+		else rankingImage = GameImage.RANKING_F;
 		
-		rankingImage.getImage()
-				.getScaledCopy(3f * yUnit / rankingImage.getImage().getHeight())
-				.draw(2f * xUnit, 2f * yUnit);
-//		Fonts.MEDIUM.drawString(xUnit, 2f * yUnit, "Ranking");
-		Fonts.LARGE.drawString(xUnit, 3 * yUnit, String.format("Accuracy\n%.2f%%", getScorePercent()));
-		Fonts.LARGE.drawString(xUnit, 5 * yUnit, String.format("Max Combo\n%dx", comboMax));
+		float rankingScale = Math.min(3f * xUnit / rankingImage.getImage().getWidth(),
+				6f * yUnit / rankingImage.getImage().getHeight());
+		rankingImage.getImage().getScaledCopy(rankingScale).draw(5.5f * xUnit, 2f * yUnit);
 		
-		GameImage.HIT_PERFECT.getImage()
-				.getScaledCopy(0.8f * yUnit / GameImage.HIT_PERFECT.getImage().getHeight())
-				.draw(xUnit, 7f * yUnit);
-		GameImage.HIT_GOOD.getImage()
-				.getScaledCopy(0.8f * yUnit / GameImage.HIT_GOOD.getImage().getHeight())
-				.draw(xUnit, 8f * yUnit);
-		GameImage.HIT_OK.getImage()
-				.getScaledCopy(0.8f * yUnit / GameImage.HIT_OK.getImage().getHeight())
-				.draw(xUnit, 9f * yUnit);
-		GameImage.HIT_MISS.getImage()
-				.getScaledCopy(0.8f * yUnit / GameImage.HIT_MISS.getImage().getHeight())
-				.draw(xUnit, 10f * yUnit);
-
+		GameImage.SCORECARD_LABEL.getImage()
+				.getScaledCopy(4f * xUnit / GameImage.SCORECARD_LABEL.getImage().getWidth())
+				.drawCentered(3f * xUnit, 2.5f * yUnit);
 		
-		float yText = height / 4;
-		// TODO: this is just placeholder until we make better UI
-		Fonts.XLARGE.drawString(width / 2, yText, String.format("Grade: %d", getGrade()), Color.white);
-		yText += Fonts.XLARGE.getLineHeight() + .01f*height;
-		Fonts.LARGE.drawString(width / 2, yText, String.format("Percent: %f", getScorePercent()), Color.white);
-		yText += Fonts.LARGE.getLineHeight() + .02f*height;
-		Fonts.LARGE.drawString(width / 2, yText, String.format("Perfects: %d", hitPerfect), Color.white);
-		yText += Fonts.LARGE.getLineHeight() + .005f*height;
-		Fonts.LARGE.drawString(width / 2, yText, String.format("Goods: %d", hitGood), Color.white);
-		yText += Fonts.LARGE.getLineHeight() + .005f*height;
-		Fonts.LARGE.drawString(width / 2, yText, String.format("Okays: %d", hitOkay), Color.white);
-		yText += Fonts.LARGE.getLineHeight() + .005f*height;
-		Fonts.LARGE.drawString(width / 2, yText, String.format("Misses: %d", hitMiss), Color.white);
-		yText += Fonts.LARGE.getLineHeight() + .01f*height;
-		Fonts.LARGE.drawString(width / 2, yText, String.format("Best Combo: %d", comboMax), Color.white);
+		GameImage.SCORECARD_ACCURACY.getImage()
+				.getScaledCopy(0.5f * yUnit / GameImage.SCORECARD_ACCURACY.getImage().getHeight())
+				.draw(xUnit, 5f * yUnit);
+		GameImage.SCORECARD_MAX_COMBO.getImage()
+				.getScaledCopy(0.5f * yUnit / GameImage.SCORECARD_MAX_COMBO.getImage().getHeight())
+				.draw(3f * xUnit, 5f * yUnit);
+		
+		float generalScale = 0.5f * yUnit / scoreSymbols.get('0').getHeight();
+		drawSymbolString(String.format("%.2f%%", getScorePercent()),
+				xUnit, 5.6f * yUnit, generalScale, 1.0f, false);
+		drawSymbolString(String.format("%dx", comboMax),
+				3f * xUnit, 5.6f * yUnit, generalScale, 1.0f, false);
+		
+		float hitScale = 0.75f * yUnit / GameImage.HIT_PERFECT.getImage().getHeight();
+		GameImage.HIT_PERFECT.getImage().getScaledCopy(hitScale).draw(xUnit, 7f * yUnit);
+		GameImage.HIT_GOOD.getImage().getScaledCopy(hitScale).draw(xUnit, 8f * yUnit);
+		GameImage.HIT_OK.getImage().getScaledCopy(hitScale).draw(xUnit, 9f * yUnit);
+		GameImage.HIT_MISS.getImage().getScaledCopy(hitScale).draw(xUnit, 10f * yUnit);
+		
+		float countScale = 0.75f * yUnit / scoreSymbols.get('0').getHeight();
+		drawSymbolString(Integer.toString(hitPerfect), 4 * xUnit, 7f * yUnit, countScale, 1.0f, true);
+		drawSymbolString(Integer.toString(hitGood), 4 * xUnit, 8f * yUnit, countScale, 1.0f, true);
+		drawSymbolString(Integer.toString(hitOkay), 4 * xUnit, 9f * yUnit, countScale, 1.0f, true);
+		drawSymbolString(Integer.toString(hitMiss), 4 * xUnit, 10f * yUnit, countScale, 1.0f, true);
+		
+		Fonts.MEDIUM.drawString(5.75f * xUnit, 9f * yUnit, "Click or press space to continue.");
 	}
 }
