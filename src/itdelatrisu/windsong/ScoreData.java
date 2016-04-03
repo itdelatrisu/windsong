@@ -26,7 +26,7 @@ public class ScoreData {
 	public static final int PERFECT_TIME = 50, GOOD_TIME = 200, OKAY_TIME = 375;
 
 	/** Score points. */
-	public static final int PERFECT_SCORE = 50, GOOD_SCORE = 25, OKAY_SCORE = 10, MISS = 0;
+	public static final int PERFECT_SCORE = 1000, GOOD_SCORE = 800, OKAY_SCORE = 600, MISS = 0;
 
 	/** Grades */
 	public static final int GRADE_S = 0, GRADE_A = 1, GRADE_B = 2, GRADE_C = 3, GRADE_D = 4, GRADE_F = 5;
@@ -50,6 +50,7 @@ public class ScoreData {
 	private AnimatedValue lastHitResultValue = new AnimatedValue(800, 1f, 0f, AnimationEquation.IN_BACK);
 
 	/** Total object count (so far). */
+	@SuppressWarnings("unused")
 	private int objectCount = 0;
 
 	/** The current combo streak. */
@@ -285,7 +286,7 @@ public class ScoreData {
 
 	/** Resets the combo streak to zero. */
 	private void resetComboStreak() {
-		if (combo >= 20)
+		if (combo >= 10)
 			SoundController.playSound(SoundEffect.COMBOBREAK);
 		combo = 0;
 	}

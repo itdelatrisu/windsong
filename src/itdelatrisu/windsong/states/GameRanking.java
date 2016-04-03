@@ -23,10 +23,8 @@ import itdelatrisu.windsong.ui.UI;
  */
 public class GameRanking extends BasicGameState {
 	// game-related variables
-	private GameContainer container;
 	private StateBasedGame game;
 	private final int state;
-	private Input input;
 	
 	private ScoreData scoreData;
 
@@ -37,9 +35,7 @@ public class GameRanking extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		this.container = container;
 		this.game = game;
-		this.input = container.getInput();
 	}
 
 	@Override

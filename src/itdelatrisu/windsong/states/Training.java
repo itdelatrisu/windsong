@@ -43,9 +43,7 @@ public class Training extends BasicGameState implements LeapListener {
 	private boolean soundPlayed = false;
 
 	// game-related variables
-	private GameContainer container;
 	private StateBasedGame game;
-	private Input input;
 	private final int state;
 	
 	public Training(int state) {
@@ -55,9 +53,7 @@ public class Training extends BasicGameState implements LeapListener {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		this.container = container;
 		this.game = game;
-		this.input = container.getInput();
 
 		LeapController.addListener(this);
 	}

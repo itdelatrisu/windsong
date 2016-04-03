@@ -3,7 +3,6 @@ package itdelatrisu.windsong.ui;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -26,9 +25,6 @@ import itdelatrisu.windsong.ui.animations.AnimationEquation;
 public class UI {
 	/** Cursor. */
 	private static Cursor cursor = new Cursor();
-
-	/** Back button. */
-	private static MenuButton backButton;
 
 	/** Time to show volume image, in milliseconds. */
 	private static final int VOLUME_DISPLAY_TIME = 1500;
@@ -76,18 +72,6 @@ public class UI {
 		// initialize cursor
 		Cursor.init(container, game);
 
-		// back button
-		if (GameImage.MENU_BACK.getImages() != null) {
-			Animation back = GameImage.MENU_BACK.getAnimation(120);
-			backButton = new MenuButton(back, back.getWidth() / 2f, container.getHeight() - (back.getHeight() / 2f));
-		} else {
-			Image back = GameImage.MENU_BACK.getImage();
-			backButton = new MenuButton(back, back.getWidth() / 2f, container.getHeight() - (back.getHeight() / 2f));
-		}
-		backButton.setHoverAnimationDuration(350);
-		backButton.setHoverAnimationEquation(AnimationEquation.IN_OUT_BACK);
-		backButton.setHoverExpand(MenuButton.Expand.UP_RIGHT);
-
 		// gamepad
 		gamepad = new Gamepad();
 	}
@@ -131,7 +115,6 @@ public class UI {
 	 * Resets the necessary UI components upon entering a state.
 	 */
 	public static void enter() {
-		backButton.resetHover();
 		resetBarNotification();
 		resetTooltip();
 	}
@@ -140,11 +123,6 @@ public class UI {
 	 * Returns the game cursor.
 	 */
 	public static Cursor getCursor() { return cursor; }
-
-	/**
-	 * Returns the 'menu-back' MenuButton.
-	 */
-	public static MenuButton getBackButton() { return backButton; }
 
 	/**
 	 * Returns the gamepad instance.

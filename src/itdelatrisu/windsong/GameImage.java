@@ -9,8 +9,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.ResourceLoader;
 
-import itdelatrisu.windsong.ui.Fonts;
-
 /**
  * Game images.
  */
@@ -254,21 +252,6 @@ public enum GameImage {
 			return img.getScaledCopy((h * 0.3f) / img.getHeight());
 		}
 	},
-	MENU_BACK ("menu-back", "menu-back-%d", "png"),
-	MENU_MUSICNOTE ("music-note", "png", false, false) {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			int r = (int) ((Fonts.LARGE.getLineHeight() + Fonts.DEFAULT.getLineHeight() - 8) / getUIscale());
-			return img.getScaledCopy(r, r);
-		}
-	},
-	MENU_LOADER ("loader", "png", false, false) {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			int r = (int) ((Fonts.LARGE.getLineHeight() + Fonts.DEFAULT.getLineHeight() - 8) / getUIscale());
-			return img.getScaledCopy(r / 48f);
-		}
-	},
 	BACKGROUND ("background", "png|jpg", false, true) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
@@ -286,12 +269,6 @@ public enum GameImage {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
 			return img.getScaledCopy((w * 0.7f) / img.getWidth());
-		}
-	},
-	REPOSITORY ("repo", "png", false, false) {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy((h / 17f) / img.getHeight());
 		}
 	},
 	CHEVRON_DOWN ("chevron-down", "png", false, false),

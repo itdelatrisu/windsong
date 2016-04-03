@@ -54,15 +54,21 @@ public class MapFile implements Comparable<MapFile> {
 	public String getDifficulty() {
 		if      (difficulty <= 3) return "Easy";
 		else if (difficulty <= 5) return "Standard";
-		else if (difficulty <= 7) return "Difficulty";
+		else if (difficulty <= 7) return "Hard";
 		else                      return "Insane";
 	}
 
 	/**
-	 * Compares two MapFile objects based on difficulty.
+	 * Compares two MapFile objects.
 	 */
 	@Override
-	public int compareTo(MapFile that) { return Integer.compare(this.difficulty, that.difficulty); }
+	public int compareTo(MapFile that) {
+		int cmp = this.artist.compareTo(that.artist);
+		if (cmp != 0) return cmp;
+		cmp = this.title.compareTo(that.title);
+		if (cmp != 0) return cmp;
+		return Integer.compare(this.difficulty, that.difficulty);
+	}
 
 	/**
 	 * Returns a formatted string: "Artist - Title [Version]"

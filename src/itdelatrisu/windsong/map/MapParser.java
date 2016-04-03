@@ -6,12 +6,14 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import org.newdawn.slick.util.Log;
 
 import itdelatrisu.windsong.ErrorHandler;
+import itdelatrisu.windsong.Options;
 
 /**
  * Parser for maps.
@@ -73,7 +75,7 @@ public class MapParser {
 			File[] files = dir.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(".pmap");
+					return name.toLowerCase().endsWith(Options.MAP_FILE_EXT);
 				}
 			});
 			if (files == null || files.length < 1)
@@ -91,6 +93,9 @@ public class MapParser {
 			if (Thread.interrupted())
 				break;
 		}
+
+		// sort list
+		Collections.sort(mapList);
 
 		// clear string DB
 		stringdb = new HashMap<String, String>();

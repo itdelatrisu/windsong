@@ -65,6 +65,9 @@ public class Options {
 	/** Issue reporting address. */
 	public static final String ISSUES_URL = "https://github.com/itdelatrisu/windsong/issues/new?title=%s&body=%s";
 
+	/** File extension for map files. */
+	public static final String MAP_FILE_EXT = ".wind";
+
 	/** The map directory. */
 	private static File mapDir;
 

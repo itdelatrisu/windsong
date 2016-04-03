@@ -49,9 +49,7 @@ public class Game extends BasicGameState implements LeapListener {
 	private ScoreData scoreData;
 
 	// game-related variables
-	private GameContainer container;
 	private StateBasedGame game;
-	private Input input;
 	private final int state;
 
 	public Game(int state) {
@@ -61,9 +59,7 @@ public class Game extends BasicGameState implements LeapListener {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		this.container = container;
 		this.game = game;
-		this.input = container.getInput();
 
 		LeapController.addListener(this);
 	}
