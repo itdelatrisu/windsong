@@ -2,13 +2,13 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>itdelatrisu</groupId>
-	<artifactId>potato</artifactId>
+	<artifactId>windsong</artifactId>
 	<version>0.0.1</version>
 	<properties>
 		<version>${project.version}</version>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-		<mainClassName>itdelatrisu.potato.App</mainClassName>
+		<mainClassName>itdelatrisu.windsong.App</mainClassName>
 		<XDG>false</XDG>
 	</properties>
 	<build>
