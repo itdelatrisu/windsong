@@ -20,7 +20,6 @@ import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.map.HitObject;
 import itdelatrisu.potato.ui.Fonts;
-import itdelatrisu.potato.ui.Gamepad;
 import itdelatrisu.potato.ui.UI;
 
 /**
@@ -33,8 +32,13 @@ public class Training extends BasicGameState implements LeapListener {
 	/** The interval between map hit objects, in ms. */
 	private static final int EVENT_INTERVAL = 2000;
 
-	private int timeToNext = EVENT_INTERVAL; // time remaining until next hit object
-	private int time = 0; // time since training started
+	/** Time remaining until the next hit object. */
+	private int timeToNext = EVENT_INTERVAL;
+
+	/** Time since starting training. */
+	private int time = 0;
+
+	/** Whether the click sound was played. */
 	private boolean soundPlayed = false;
 
 	// game-related variables

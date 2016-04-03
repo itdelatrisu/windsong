@@ -8,8 +8,6 @@ import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 
-import itdelatrisu.potato.Utils;
-
 /**
  * Leap Motion listener class.
  */

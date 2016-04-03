@@ -9,11 +9,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
+import itdelatrisu.potato.audio.MusicController;
 import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.map.HitObject;
+import itdelatrisu.potato.map.PotatoMap;
 import itdelatrisu.potato.ui.Fonts;
-import itdelatrisu.potato.ui.UI;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
 
@@ -22,28 +23,17 @@ import itdelatrisu.potato.ui.animations.AnimationEquation;
  */
 public class ScoreData {
 	/** Time, in ms, before/after a hit time to achieve the corresponding score. */
-	public static final int PERFECT_TIME = 50, GOOD_TIME = 150, OKAY_TIME = 375;
+	public static final int PERFECT_TIME = 50, GOOD_TIME = 200, OKAY_TIME = 375;
 
 	/** Score points. */
-	public static final int PERFECT_SCORE = 100, GOOD_SCORE = 50, OKAY_SCORE = 20, MISS = 0;
+	public static final int PERFECT_SCORE = 50, GOOD_SCORE = 25, OKAY_SCORE = 10, MISS = 0;
 
 	/** Grades */
-	public static final int
-		GRADE_S = 0,
-		GRADE_A = 1,
-		GRADE_B = 2,
-		GRADE_C = 3,
-		GRADE_D = 4,
-		GRADE_F = 5;
-	
+	public static final int GRADE_S = 0, GRADE_A = 1, GRADE_B = 2, GRADE_C = 3, GRADE_D = 4, GRADE_F = 5;
+
 	/** Grade percentage requirements */
-	public static final float
-		REQ_S = 90f,
-		REQ_A = 85f,
-		REQ_B = 70f,
-		REQ_C = 55f,
-		REQ_D = 40f;	
-	
+	public static final int REQ_S = 90, REQ_A = 85, REQ_B = 70, REQ_C = 55, REQ_D = 40;	
+
 	/** Hit object fade-in time, in ms. */
 	public static final int HIT_OBJECT_FADEIN_TIME = 750;
 
@@ -204,6 +194,26 @@ public class ScoreData {
 			String.format((scorePercentDisplay < 10f) ? "0%.2f%%" : "%.2f%%", scorePercentDisplay),
 			width - margin, symbolHeight, 0.60f, 1f, true);
 
+		// map progress circle
+		PotatoMap map = MusicController.getMap();
+		int firstObjectTime = map.objects[0].getTime();
+		int trackPosition = MusicController.getPosition();
+		float circleDiameter = symbolHeight * 0.60f;
+		int circleX = (int) (width - margin - (  // max width: "100.00%"
+				scoreSymbols.get('1').getWidth() +
+				scoreSymbols.get('0').getWidth() * 4 +
+				scoreSymbols.get('.').getWidth() +
+				scoreSymbols.get('%').getWidth()
+		) * 0.60f - circleDiameter);
+		g.setAntiAlias(true);
+		g.setLineWidth(2f);
+		g.setColor(Color.white);
+		g.drawOval(circleX, symbolHeight, circleDiameter, circleDiameter);
+		if (trackPosition > firstObjectTime)  // map progress (white)
+			g.fillArc(circleX, symbolHeight, circleDiameter, circleDiameter,
+				-90, -90 + (int) (360f * (Math.min(trackPosition, map.getEndTime()) - firstObjectTime) / (map.getEndTime() - firstObjectTime)));
+		g.setAntiAlias(false);
+
 		// scorebar
 		float healthRatio = healthDisplay / 100f;
 		Image scorebar = GameImage.SCOREBAR_BG.getImage();
@@ -300,14 +310,14 @@ public class ScoreData {
 	 * Returns the raw score percentage.
 	 */
 	private float getScorePercent() { return getScorePercent(hitPerfect, hitGood, hitOkay, hitMiss); }
-	
+
 	/**
 	 * Gets the grade associated with the percent scored / missed.
 	 * @return the grade
 	 */
 	public int getGrade() {
 		float percent = getScorePercent();
-		
+
 		if (percent >= REQ_S && hitMiss == 0) return GRADE_S;
 		if (percent >= REQ_A) return GRADE_A;
 		if (percent >= REQ_B) return GRADE_B;
