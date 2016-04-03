@@ -229,15 +229,12 @@ public enum GameImage {
 			return img.getScaledCopy(0.8f);
 		}
 	},
-	WELCOME  ("welcome", "png", false, true) {
+	WELCOME ("welcome", "png", false, true) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
 			return img.getScaledCopy((w * 0.7f) / img.getWidth());
 		}
 	},
-	MENU_BUTTON_MID ("button-middle", "png", false, false),
-	MENU_BUTTON_LEFT ("button-left", "png", false, false),
-	MENU_BUTTON_RIGHT ("button-right", "png", false, false),
 	REPOSITORY ("repo", "png", false, false) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {

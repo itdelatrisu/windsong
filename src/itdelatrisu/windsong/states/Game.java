@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.windsong.App;
 import itdelatrisu.windsong.ErrorHandler;
+import itdelatrisu.windsong.GameImage;
 import itdelatrisu.windsong.Options;
 import itdelatrisu.windsong.ScoreData;
 import itdelatrisu.windsong.Utils;
@@ -70,6 +71,9 @@ public class Game extends BasicGameState implements LeapListener {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+		// background
+		GameImage.BACKGROUND.getImage().draw();
+
 		// show gamepad
 		UI.getGamepad().draw(g);
 
@@ -144,21 +148,6 @@ public class Game extends BasicGameState implements LeapListener {
 			Utils.takeScreenShot();
 			break;
 		}
-	}
-
-	@Override
-	public void mousePressed(int button, int x, int y) {
-
-	}
-
-	@Override
-	public void mouseReleased(int button, int x, int y) {
-		
-	}
-
-	@Override
-	public void keyReleased(int key, char c) {
-		
 	}
 
 	@Override

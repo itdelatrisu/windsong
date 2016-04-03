@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.EasedFadeOutTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 
 import itdelatrisu.windsong.App;
+import itdelatrisu.windsong.GameImage;
 import itdelatrisu.windsong.ScoreData;
 import itdelatrisu.windsong.Utils;
 import itdelatrisu.windsong.audio.MusicController;
@@ -65,6 +66,9 @@ public class Training extends BasicGameState implements LeapListener {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		int width = container.getWidth(), height = container.getHeight();
+
+		// background
+		GameImage.BACKGROUND.getImage().draw();
 
 		// show gamepad
 		UI.getGamepad().draw(g);
