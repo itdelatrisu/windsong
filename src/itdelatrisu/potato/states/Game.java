@@ -69,6 +69,9 @@ public class Game extends BasicGameState implements LeapListener {
 		// show gamepad
 		UI.getGamepad().draw(g);
 
+		// last hit result
+		scoreData.drawLastHitResult(g);
+
 		// draw game elements
 		scoreData.drawGameElements(g);
 

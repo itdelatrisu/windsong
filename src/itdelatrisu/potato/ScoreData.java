@@ -13,6 +13,9 @@ import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.map.HitObject;
 import itdelatrisu.potato.ui.Fonts;
+import itdelatrisu.potato.ui.UI;
+import itdelatrisu.potato.ui.animations.AnimatedValue;
+import itdelatrisu.potato.ui.animations.AnimationEquation;
 
 /**
  * Holds all score-related data.
@@ -49,7 +52,13 @@ public class ScoreData {
 
 	/** Count for each type of hit result. */
 	private int hitPerfect, hitGood, hitOkay, hitMiss;
-	
+
+	/** Image of the last hit result. */
+	private GameImage lastHitResult;
+
+	/** Alpha value of the last hit result. */
+	private AnimatedValue lastHitResultValue = new AnimatedValue(800, 1f, 0f, AnimationEquation.IN_BACK);
+
 	/** Total object count (so far). */
 	private int objectCount = 0;
 
@@ -227,6 +236,18 @@ public class ScoreData {
 		}
 	}
 
+	/**
+	 * Draws the last hit result image.
+	 * @param g the graphics context
+	 */
+	public void drawLastHitResult(Graphics g) {
+		if (lastHitResult == null || lastHitResultValue.getValue() == 0f)
+			return;
+		Image img = lastHitResult.getImage().getScaledCopy(0.6f);
+		img.setAlpha(lastHitResultValue.getValue());
+		img.drawCentered(width / 2, height * 0.22f);
+	}
+
 	/** Returns the current health percentage. */
 	public float getHealth() { return health; }
 
@@ -323,20 +344,25 @@ public class ScoreData {
 				if (timeDiff < PERFECT_TIME) {
 					points = PERFECT_SCORE;
 					hitPerfect++;
+					lastHitResult = GameImage.HIT_PERFECT;
 					changeHealth(5f);
 				} else if (timeDiff < GOOD_TIME) {
 					points = GOOD_SCORE;
 					hitGood++;
+					lastHitResult = GameImage.HIT_GOOD;
 					changeHealth(2f);
 				} else if (timeDiff < OKAY_TIME) {
 					points = OKAY_SCORE;
 					hitOkay++;
+					lastHitResult = GameImage.HIT_OK;
 				} else {
 					points = MISS;
 					hitMiss++;
+					lastHitResult = GameImage.HIT_MISS;
 					changeHealth(-5f);
 					resetComboStreak();
 				}
+				lastHitResultValue.setTime(0);
 
 				// successful hit!
 				if (points != MISS) {
@@ -351,7 +377,7 @@ public class ScoreData {
 				// remove the hit object
 				hitObjects.remove(h);
 
-				return score;
+				return points;
 			}
 		}
 		return MISS;
@@ -363,6 +389,9 @@ public class ScoreData {
 	 * @param trackPosition the track position
 	 */
 	public void update(int delta, int trackPosition) {
+		if (lastHitResult != null)
+			lastHitResultValue.update(delta);
+
 		// remove hit objects after their time has expired
 		List<HitObject> toRemove = new ArrayList<HitObject>();
 		for (HitObject h : hitObjects) {
@@ -377,6 +406,8 @@ public class ScoreData {
 			hitMiss += toRemove.size();
 			changeHealth(-5f * toRemove.size());
 			resetComboStreak();
+			lastHitResult = GameImage.HIT_MISS;
+			lastHitResultValue.setTime(0);
 		}
 
 		// score display

@@ -65,6 +65,9 @@ public class Training extends BasicGameState implements LeapListener {
 		// show gamepad
 		UI.getGamepad().draw(g);
 
+		// last hit result
+		scoreData.drawLastHitResult(g);
+
 		// text	
 		float textY = height * 0.03f;
 		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
@@ -77,13 +80,11 @@ public class Training extends BasicGameState implements LeapListener {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		Gamepad gp = UI.getGamepad();
-		
 		time += delta;
 		timeToNext -= delta;
 		if (timeToNext < 0) {
 			int pos = (int) (Math.random() * 9);
-			gp.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME);
+			UI.getGamepad().sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME);
 			HitObject hit = new HitObject(time + ScoreData.HIT_OBJECT_FADEIN_TIME, pos, HitObject.SOUND_CLAP);
 			scoreData.sendMapObject(hit);
 
@@ -94,9 +95,9 @@ public class Training extends BasicGameState implements LeapListener {
 			soundPlayed = true;
 			SoundController.playSound(SoundEffect.MENUCLICK);
 		}
-		
+
 		UI.update(delta);
-		gp.update(delta);
+		UI.getGamepad().update(delta);
 		scoreData.update(delta, time);
 	}
 
