@@ -1,0 +1,181 @@
+Sat Apr 02 04:31:58 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:31:58 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:31:59 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:31:59 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:00 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:00 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:01 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:01 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:02 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:02 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:03 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:04 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:04 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:05 EDT 2016 ERROR:R 2 1
+Sat Apr 02 04:32:06 EDT 2016 ERROR:L 1 1
+Sat Apr 02 04:32:06 EDT 2016 ERROR:L 1 1
+Sat Apr 02 04:32:07 EDT 2016 ERROR:L 1 1
+Sat Apr 02 04:32:16 EDT 2016 ERROR:L 1 1
+Sat Apr 02 04:32:16 EDT 2016 ERROR:L 1 1
+Sat Apr 02 04:32:34 EDT 2016 ERROR:asdf
+Sat Apr 02 04:32:36 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:36 EDT 2016 ERROR:R 1 1
+Sat Apr 02 04:32:37 EDT 2016 ERROR:R 1 1
+Sat Apr 02 18:54:04 EDT 2016 ERROR:Leap Motion controller has disconnected.
+Sat Apr 02 21:23:55 EDT 2016 ERROR:Game.update() failure.
+org.newdawn.slick.SlickException: Game.update() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:708)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.states.Game.update(Game.java:89)
+	at org.newdawn.slick.state.StateBasedGame.update(StateBasedGame.java:266)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:702)
+	... 3 more
+Sat Apr 02 21:24:34 EDT 2016 ERROR:Game.update() failure.
+org.newdawn.slick.SlickException: Game.update() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:708)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.states.Game.update(Game.java:89)
+	at org.newdawn.slick.state.StateBasedGame.update(StateBasedGame.java:266)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:702)
+	... 3 more
+Sat Apr 02 21:43:16 EDT 2016 ERROR:Game.update() failure.
+org.newdawn.slick.SlickException: Game.update() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:708)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.states.Game.update(Game.java:91)
+	at org.newdawn.slick.state.StateBasedGame.update(StateBasedGame.java:266)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:702)
+	... 3 more
+Sat Apr 02 21:46:25 EDT 2016 ERROR:Game.update() failure.
+org.newdawn.slick.SlickException: Game.update() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:708)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.states.Game.update(Game.java:91)
+	at org.newdawn.slick.state.StateBasedGame.update(StateBasedGame.java:266)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:702)
+	... 3 more
+Sat Apr 02 23:16:01 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.
+Sun Apr 03 00:50:57 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.
+Sun Apr 03 02:15:53 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.
+Sun Apr 03 02:22:59 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.
+Sun Apr 03 02:23:16 EDT 2016 ERROR:Game.render() failure.
+org.newdawn.slick.SlickException: Game.render() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:730)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.util.UnknownFormatConversionException: Conversion = '%'
+	at java.util.Formatter.checkText(Formatter.java:2579)
+	at java.util.Formatter.parse(Formatter.java:2565)
+	at java.util.Formatter.format(Formatter.java:2501)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2940)
+	at itdelatrisu.potato.ScoreData.drawScoreScreen(ScoreData.java:487)
+	at itdelatrisu.potato.states.GameRanking.render(GameRanking.java:54)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:727)
+	... 3 more
+Sun Apr 03 02:28:01 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.
+Sun Apr 03 02:30:43 EDT 2016 ERROR:Game.render() failure.
+org.newdawn.slick.SlickException: Game.render() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:730)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.util.IllegalFormatConversionException: f != java.lang.Integer
+	at java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4302)
+	at java.util.Formatter$FormatSpecifier.printFloat(Formatter.java:2806)
+	at java.util.Formatter$FormatSpecifier.print(Formatter.java:2753)
+	at java.util.Formatter.format(Formatter.java:2520)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2940)
+	at itdelatrisu.potato.ScoreData.drawScoreScreen(ScoreData.java:488)
+	at itdelatrisu.potato.states.GameRanking.render(GameRanking.java:54)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:727)
+	... 3 more
+Sun Apr 03 02:31:00 EDT 2016 ERROR:Game.render() failure.
+org.newdawn.slick.SlickException: Game.render() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:730)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:149)
+Caused by: java.util.IllegalFormatConversionException: f != java.lang.Integer
+	at java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4302)
+	at java.util.Formatter$FormatSpecifier.printFloat(Formatter.java:2806)
+	at java.util.Formatter$FormatSpecifier.print(Formatter.java:2753)
+	at java.util.Formatter.format(Formatter.java:2520)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2940)
+	at itdelatrisu.potato.ScoreData.drawScoreScreen(ScoreData.java:488)
+	at itdelatrisu.potato.states.GameRanking.render(GameRanking.java:54)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:727)
+	... 3 more
+Sun Apr 03 03:16:13 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.
+Sun Apr 03 03:38:52 EDT 2016 ERROR:Game.render() failure.
+org.newdawn.slick.SlickException: Game.render() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:730)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:152)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.ScoreData.drawFixedSizeSymbolString(ScoreData.java:129)
+	at itdelatrisu.potato.ScoreData.drawScoreScreen(ScoreData.java:502)
+	at itdelatrisu.potato.states.GameRanking.render(GameRanking.java:54)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:727)
+	... 3 more
+Sun Apr 03 03:39:24 EDT 2016 ERROR:Game.render() failure.
+org.newdawn.slick.SlickException: Game.render() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:730)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:152)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.ScoreData.drawFixedSizeSymbolString(ScoreData.java:129)
+	at itdelatrisu.potato.ScoreData.drawScoreScreen(ScoreData.java:502)
+	at itdelatrisu.potato.states.GameRanking.render(GameRanking.java:54)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:727)
+	... 3 more
+Sun Apr 03 03:40:51 EDT 2016 ERROR:Game.render() failure.
+org.newdawn.slick.SlickException: Game.render() failure.
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:730)
+	at itdelatrisu.potato.Container.gameLoop(Container.java:74)
+	at itdelatrisu.potato.Container.start(Container.java:48)
+	at itdelatrisu.potato.App.main(App.java:152)
+Caused by: java.lang.NullPointerException
+	at itdelatrisu.potato.ScoreData.drawFixedSizeSymbolString(ScoreData.java:129)
+	at itdelatrisu.potato.ScoreData.drawScoreScreen(ScoreData.java:503)
+	at itdelatrisu.potato.states.GameRanking.render(GameRanking.java:54)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:727)
+	... 3 more
+Sun Apr 03 04:08:05 EDT 2016 ERROR:The game could not be launched for one of these reasons:
+- An instance of the game is already running.
+- Another program is bound to port 55556. You can change the port the game uses by editing the "Port" field in the configuration file.

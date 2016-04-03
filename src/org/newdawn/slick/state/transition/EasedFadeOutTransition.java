@@ -1,6 +1,6 @@
 package org.newdawn.slick.state.transition;
 
-import itdelatrisu.potato.ui.animations.AnimationEquation;
+import itdelatrisu.windsong.ui.animations.AnimationEquation;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
