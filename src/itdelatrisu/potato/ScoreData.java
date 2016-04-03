@@ -17,7 +17,7 @@ public class ScoreData {
 	// TODO: finalize these numbers
 	private static final int PERFECT_TIME = 50;
 	private static final int GOOD_TIME = 150;
-	private static final int OKAY_TIME = 375;
+	public static final int OKAY_TIME = 375;
 	
 	private static final int PERFECT_SCORE = 100;
 	private static final int GOOD_SCORE = 50;

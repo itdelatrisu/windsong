@@ -5,6 +5,7 @@ import org.newdawn.slick.Image;
 
 import itdelatrisu.potato.ErrorHandler;
 import itdelatrisu.potato.GameImage;
+import itdelatrisu.potato.ScoreData;
 import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
@@ -13,7 +14,7 @@ import itdelatrisu.potato.ui.animations.AnimationEquation;
  * Leap Motion gamepad.
  */
 public class Gamepad {
-	/** Number of gamepad buttons. */
+	/** Number of gamepad positions. */
 	private static final int GAMEPAD_BUTTONS = 9;
 
 	/** Time to fade out hits, in ms. */
@@ -25,14 +26,17 @@ public class Gamepad {
 	/** Gamepad hit images. */
 	private Image[] hitImages;
 
-	/** Alpha values of hits for each gamepad button. */
+	/** Alpha values of hits for each gamepad position. */
 	private AnimatedValue[] hitValues;
 
 	/** Gamepad map object images. */
 	private Image[] mapObjectImages;
 
-	/** Alpha values of map hit objects for each gamepad button. */
+	/** Alpha values of map hit objects for each gamepad position. */
 	private AnimatedValue[] mapObjectValues;
+
+	/** Whether the map object is fading in at each gamepad position. */
+	private boolean[] mapObjectFadingIn;
 
 	/**
 	 * Constructor.
@@ -42,6 +46,7 @@ public class Gamepad {
 		hitValues = new AnimatedValue[GAMEPAD_BUTTONS];
 		mapObjectImages = new Image[GAMEPAD_BUTTONS];
 		mapObjectValues = new AnimatedValue[GAMEPAD_BUTTONS];
+		mapObjectFadingIn = new boolean[GAMEPAD_BUTTONS];
 		for (int i = 0; i < GAMEPAD_BUTTONS; i++) {
 			hitImages[i] = GameImage.valueOf(String.format("GAMEPAD_%d", i)).getImage().copy();
 			hitValues[i] = new AnimatedValue(HIT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
@@ -58,15 +63,15 @@ public class Gamepad {
 		Image bg = GameImage.GAMEPAD_BG.getImage();
 		bg.draw();
 		for (int i = 0; i < GAMEPAD_BUTTONS; i++) {
-			float hitAlpha = hitValues[i].getValue();
-			if (hitAlpha != 0f) {
-				hitImages[i].setAlpha(hitAlpha);
-				hitImages[i].draw();
-			}
 			float mapObjectAlpha = mapObjectValues[i].getValue();
 			if (mapObjectAlpha != 0f) {
 				mapObjectImages[i].setAlpha(mapObjectAlpha);
 				mapObjectImages[i].draw();
+			}
+			float hitAlpha = hitValues[i].getValue();
+			if (hitAlpha != 0f) {
+				hitImages[i].setAlpha(hitAlpha);
+				hitImages[i].draw();
 			}
 		}
 		Image gamepad = GameImage.GAMEPAD.getImage();
@@ -81,8 +86,11 @@ public class Gamepad {
 		for (int i = 0; i < GAMEPAD_BUTTONS; i++) {
 			hitValues[i].update(delta);
 			mapObjectValues[i].update(delta);
-			if (mapObjectValues[i].getValue() == 1f)
+			if (mapObjectValues[i].getValue() == 1f) {
+				// start fading out
 				mapObjectValues[i] = new AnimatedValue(HIT_OBJECT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
+				mapObjectFadingIn[i] = false;
+			}
 		}
 	}
 
@@ -104,6 +112,12 @@ public class Gamepad {
 		checkBounds(pos);
 		hitValues[pos].setTime(0);
 		SoundController.playHitSound(sound);
+
+		// start fading out any map hit object immediately
+		if (mapObjectFadingIn[pos] && mapObjectValues[pos].getDuration() - mapObjectValues[pos].getTime() <= ScoreData.OKAY_TIME) {
+			mapObjectValues[pos] = new AnimatedValue(HIT_OBJECT_FADEOUT_TIME, 1f, 0f, AnimationEquation.OUT_CUBIC);
+			mapObjectFadingIn[pos] = false;
+		}
 	}
 
 	/**
@@ -120,7 +134,10 @@ public class Gamepad {
 	 * Resets all gamepad values.
 	 */
 	public void reset() {
-		for (int i = 0; i < GAMEPAD_BUTTONS; i++)
+		for (int i = 0; i < GAMEPAD_BUTTONS; i++) {
 			hitValues[i].setTime(HIT_FADEOUT_TIME);
+			mapObjectValues[i] = new AnimatedValue(1, 0f, 0f, AnimationEquation.LINEAR);  // dummy
+			mapObjectFadingIn[i] = false;
+		}
 	}
 }
