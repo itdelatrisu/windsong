@@ -9,8 +9,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import itdelatrisu.potato.audio.SoundController;
+import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.map.HitObject;
 
+/**
+ * Holds all score-related data.
+ */
 public class ScoreData {
 	/** Time, in ms, before/after a hit time to achieve the corresponding score. */
 	public static final int PERFECT_TIME = 50, GOOD_TIME = 150, OKAY_TIME = 375;
@@ -18,14 +22,26 @@ public class ScoreData {
 	/** Score points. */
 	public static final int PERFECT_SCORE = 100, GOOD_SCORE = 50, OKAY_SCORE = 20, MISS = 0;
 
+	/** Hit object fade-in time, in ms. */
+	public static final int HIT_OBJECT_FADEIN_TIME = 750;
+
+	/** Duration, in milliseconds, of a combo pop effect. */
+	private static final int COMBO_POP_TIME = 250;
+
 	/** Count for each type of hit result. */
 	private int hitPerfect, hitGood, hitOkay, hitMiss;
 
 	/** Total object count (so far). */
 	private int objectCount = 0;
 
-	/** Hit object fade-in time, in ms. */
-	public static final int HIT_OBJECT_FADEIN_TIME = 750;
+	/** The current combo streak. */
+	private int combo = 0;
+
+	/** The max combo streak obtained. */
+	private int comboMax = 0;
+
+	/** The current combo pop timer, in milliseconds. */
+	private int comboPopTime = 0;
 
 	/** Current game score. */
 	private long score = 0;
@@ -152,10 +168,41 @@ public class ScoreData {
 		drawSymbolString(
 			String.format((scorePercentDisplay < 10f) ? "0%.2f%%" : "%.2f%%", scorePercentDisplay),
 			width - margin, symbolHeight, 0.60f, 1f, true);
+
+		// combo count
+		if (combo > 0) {
+			float comboPop = 1 - ((float) comboPopTime / COMBO_POP_TIME);
+			float comboPopBack  = 1 + comboPop * 0.45f;
+			float comboPopFront = 1 + comboPop * 0.08f;
+			String comboString = String.format("%dx", combo);
+			if (comboPopTime != COMBO_POP_TIME)
+				drawSymbolString(comboString, margin, height - margin - (symbolHeight * comboPopBack), comboPopBack, 0.5f, false);
+			drawSymbolString(comboString, margin, height - margin - (symbolHeight * comboPopFront), comboPopFront, 1f, false);
+		}
 	}
 
 	/** Returns the current score. */
 	public long getScore() { return score; }
+
+	/** Returns the current combo streak. */
+	public int getComboStreak() { return combo; }
+
+	/**
+	 * Increases the combo streak by one.
+	 */
+	private void incrementComboStreak() {
+		combo++;
+		comboPopTime = 0;
+		if (combo > comboMax)
+			comboMax = combo;
+	}
+
+	/** Resets the combo streak to zero. */
+	private void resetComboStreak() {
+		if (combo >= 20)
+			SoundController.playSound(SoundEffect.COMBOBREAK);
+		combo = 0;
+	}
 
 	/**
 	 * Returns the raw score percentage.
@@ -215,15 +262,18 @@ public class ScoreData {
 				} else {
 					points = MISS;
 					hitMiss++;
-					// TODO: combo break
+					resetComboStreak();
 				}
 
-				// increment score
-				score += points;
+				// successful hit!
+				if (points != MISS) {
+					// increment score/combo
+					score += points;
+					incrementComboStreak();
 
-				// play the hit sound
-				if (points != MISS)
+					// play the hit sound
 					SoundController.playHitSound(h.getSound());
+				}
 
 				// remove the hit object
 				hitObjects.remove(h);
@@ -231,7 +281,6 @@ public class ScoreData {
 				return score;
 			}
 		}
-
 		return MISS;
 	}
 
@@ -247,10 +296,14 @@ public class ScoreData {
 			if (h.getTime() - trackPosition < -OKAY_TIME)
 				toRemove.add(h);
 		}
-		for (HitObject r : toRemove)
-			hitObjects.remove(r);
-		hitMiss += toRemove.size();
-		// TODO: combo break
+		if (!toRemove.isEmpty()) {
+			for (HitObject r : toRemove)
+				hitObjects.remove(r);
+
+			// count misses and break combo
+			hitMiss += toRemove.size();
+			resetComboStreak();
+		}
 
 		// score display
 		if (scoreDisplay < score) {
@@ -272,5 +325,10 @@ public class ScoreData {
 					scorePercentDisplay = scorePercent;
 			}
 		}
+
+		// combo pop
+		comboPopTime += delta;
+		if (comboPopTime > COMBO_POP_TIME)
+			comboPopTime = COMBO_POP_TIME;
 	}
 }
