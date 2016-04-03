@@ -19,8 +19,8 @@ import itdelatrisu.windsong.Utils;
 import itdelatrisu.windsong.audio.MusicController;
 import itdelatrisu.windsong.audio.SoundController;
 import itdelatrisu.windsong.audio.SoundEffect;
-import itdelatrisu.windsong.map.MapParser;
 import itdelatrisu.windsong.map.MapFile;
+import itdelatrisu.windsong.map.MapParser;
 import itdelatrisu.windsong.ui.Colors;
 import itdelatrisu.windsong.ui.Fonts;
 import itdelatrisu.windsong.ui.KineticScrolling;
@@ -91,7 +91,7 @@ public class MainMenu extends BasicGameState {
 
 		// map listing coordinates/dimensions
 		buttonBaseX = width * 0.04f;
-		buttonBaseY = height * 0.2f;
+		buttonBaseY = height * 0.07f + GameImage.MENU_LOGO.getImage().getHeight() + Fonts.MEDIUM.getLineHeight();
 		buttonWidth = width - buttonBaseX * 1.98f;
 		buttonHeight = Fonts.MEDIUM.getLineHeight() * 2.1f;
 		buttonOffset = buttonHeight * 1.1f;
@@ -137,10 +137,12 @@ public class MainMenu extends BasicGameState {
 			petalStreams[i].draw();
 
 		// title
+		float textY = height * 0.04f;
+		Image logo = GameImage.MENU_LOGO.getImage();
+		logo.setAlpha(stateTimer.getValue());
+		logo.drawCentered(width / 2, textY + logo.getHeight() / 2);
+		textY += logo.getHeight() + height * 0.01f;
 		Color color = new Color(1f, 1f, 1f, stateTimer.getValue());
-		float textY = height * 0.03f;
-		Fonts.XLARGE.drawString(buttonBaseX, textY, "Windsong", color);
-		textY += Fonts.XLARGE.getLineHeight() + height * 0.01f;
 		if (focusMap != null) {
 			String s1 = "You've selected ", s2 = " by ", s3 = ".";
 			float offsetS1 = Fonts.MEDIUM.getWidth(s1), offsetS2 = Fonts.MEDIUM.getWidth(s2);

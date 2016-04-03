@@ -226,7 +226,7 @@ public enum GameImage {
 	MENU_LOGO ("logo", "png", false, true) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy(0.8f);
+			return img.getScaledCopy((h * 0.15f) / img.getHeight());
 		}
 	},
 	WELCOME ("welcome", "png", false, true) {
