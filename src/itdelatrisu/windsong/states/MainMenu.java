@@ -257,7 +257,10 @@ public class MainMenu extends BasicGameState {
 				}
 			}
 		}
+
+		// else unselect and play theme song
 		focusIndex = -1;
+		MusicController.playThemeSong();
 	}
 
 	@Override

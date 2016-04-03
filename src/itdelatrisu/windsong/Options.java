@@ -126,7 +126,7 @@ public class Options {
 	 * The theme song string:
 	 * {@code filename,title,artist,length(ms)}
 	 */
-	private static String themeString = "theme.ogg,On the Bach,Jingle Punks,66000";
+	private static String themeString = "Prelude_No_21.mp3,Prelude No. 21,Chris Zabriskie,63014";
 
 	/** Game options. */
 	public enum GameOption {
