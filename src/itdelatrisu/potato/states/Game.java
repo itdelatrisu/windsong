@@ -66,9 +66,12 @@ public class Game extends BasicGameState implements LeapListener {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		int width = container.getWidth(), height = container.getHeight();
+		// show gamepad
 		UI.getGamepad().draw(g);
+
+		// draw game elements
 		scoreData.drawGameElements(g);
+
 		UI.draw(g);
 	}
 
@@ -125,6 +128,7 @@ public class Game extends BasicGameState implements LeapListener {
 			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_SPACE:
+			// TODO for debugging, delete me
 			((GameRanking)(game.getState(App.STATE_GAMERANKING))).setScoreData(scoreData);
 			game.enterState(App.STATE_GAMERANKING, new EasedFadeOutTransition(), new FadeInTransition());
 		case Input.KEY_F12:

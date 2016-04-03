@@ -70,10 +70,6 @@ public class Training extends BasicGameState implements LeapListener {
 		Fonts.XLARGE.drawString(width * 0.04f, textY, "Training", Color.white);
 		textY += height * 0.01f + Fonts.XLARGE.getLineHeight();
 		Fonts.MEDIUM.drawString(width * 0.04f, textY, "Click anywhere or press space to continue.");
-		
-		// temporary until we use jeffrey's cool score thing
-		textY += height * 0.02f + Fonts.MEDIUM.getLineHeight();
-		Fonts.MEDIUM.drawString(width * 0.04f, textY, String.format("Score: %d", scoreData.getScore()));
 
 		UI.draw(g);
 	}
@@ -143,6 +139,7 @@ public class Training extends BasicGameState implements LeapListener {
 			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_SPACE:
+		case Input.KEY_ENTER:
 			game.enterState(App.STATE_GAME, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_F12:

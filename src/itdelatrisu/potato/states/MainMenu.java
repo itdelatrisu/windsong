@@ -242,8 +242,9 @@ public class MainMenu extends BasicGameState {
 			container.exit();
 			break;
 		case Input.KEY_SPACE:
-			// TODO: delete me
-			game.enterState(App.STATE_TRAINING, new EasedFadeOutTransition(), new FadeInTransition());
+		case Input.KEY_ENTER:
+			if (focusIndex != -1)
+				game.enterState(App.STATE_TRAINING, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
 		case Input.KEY_F12:
 			Utils.takeScreenShot();

@@ -282,9 +282,7 @@ public class ScoreData {
 	
 	/**
 	 * Gets the grade associated with the percent scored / missed.
-	 * @param percent the score percentage
-	 * @param numMisses the number of misses
-	 * @return
+	 * @return the grade
 	 */
 	public int getGrade() {
 		float percent = getScorePercent();
@@ -403,7 +401,8 @@ public class ScoreData {
 		}
 
 		// drain health...
-		changeHealth(-delta / 200f);
+		if (!hitObjects.isEmpty())
+			changeHealth(-delta / 200f);
 
 		// health display
 		if (healthDisplay != health) {
