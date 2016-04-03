@@ -121,8 +121,12 @@ public class Game extends BasicGameState implements LeapListener {
 		case Input.KEY_ESCAPE:
 			SoundController.playSound(SoundEffect.MENUBACK);
 			MusicController.playAt(0, true);
+			((GameRanking)(game.getState(App.STATE_GAMERANKING))).setScoreData(scoreData);
 			game.enterState(App.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 			break;
+		case Input.KEY_SPACE:
+			((GameRanking)(game.getState(App.STATE_GAMERANKING))).setScoreData(scoreData);
+			game.enterState(App.STATE_GAMERANKING, new EasedFadeOutTransition(), new FadeInTransition());
 		case Input.KEY_F12:
 			Utils.takeScreenShot();
 			break;
@@ -131,8 +135,7 @@ public class Game extends BasicGameState implements LeapListener {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		// TODO (get rid of this)
-		game.enterState(App.STATE_GAMERANKING, new EasedFadeOutTransition(), new FadeInTransition());
+
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -11,6 +12,7 @@ import org.newdawn.slick.Image;
 import itdelatrisu.potato.audio.SoundController;
 import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.map.HitObject;
+import itdelatrisu.potato.ui.Fonts;
 
 /**
  * Holds all score-related data.
@@ -22,6 +24,23 @@ public class ScoreData {
 	/** Score points. */
 	public static final int PERFECT_SCORE = 100, GOOD_SCORE = 50, OKAY_SCORE = 20, MISS = 0;
 
+	/** Grades */
+	public static final int
+		GRADE_S = 0,
+		GRADE_A = 1,
+		GRADE_B = 2,
+		GRADE_C = 3,
+		GRADE_D = 4,
+		GRADE_F = 5;
+	
+	/** Grade percentage requirements */
+	public static final float
+		REQ_S = 0.90f,
+		REQ_A = 0.85f,
+		REQ_B = 0.7f,
+		REQ_C = 0.55f,
+		REQ_D = 0.4f;	
+	
 	/** Hit object fade-in time, in ms. */
 	public static final int HIT_OBJECT_FADEIN_TIME = 750;
 
@@ -30,7 +49,7 @@ public class ScoreData {
 
 	/** Count for each type of hit result. */
 	private int hitPerfect, hitGood, hitOkay, hitMiss;
-
+	
 	/** Total object count (so far). */
 	private int objectCount = 0;
 
@@ -260,6 +279,23 @@ public class ScoreData {
 	 * Returns the raw score percentage.
 	 */
 	private float getScorePercent() { return getScorePercent(hitPerfect, hitGood, hitOkay, hitMiss); }
+	
+	/**
+	 * Gets the grade associated with the percent scored / missed.
+	 * @param percent the score percentage
+	 * @param numMisses the number of misses
+	 * @return
+	 */
+	public int getGrade() {
+		float percent = getScorePercent();
+		
+		if (percent >= REQ_S && hitMiss == 0) return GRADE_S;
+		if (percent >= REQ_A) return GRADE_A;
+		if (percent >= REQ_B) return GRADE_B;
+		if (percent >= REQ_C) return GRADE_C;
+		if (percent >= REQ_D) return GRADE_D;
+		return GRADE_F;
+	}
 
 	/**
 	 * Registers the given map hit object.
@@ -387,5 +423,27 @@ public class ScoreData {
 		comboPopTime += delta;
 		if (comboPopTime > COMBO_POP_TIME)
 			comboPopTime = COMBO_POP_TIME;
+	}
+	
+	/**
+	 * Draws the scoring information to the screen.
+	 */
+	public void drawScoreScreen() {
+		float yText = height / 4;
+		
+		// TODO: this is just placeholder until we make better UI
+		Fonts.XLARGE.drawString(width / 2, yText, String.format("Grade: %d", getGrade()), Color.white);
+		yText += Fonts.XLARGE.getLineHeight() + .01f*height;
+		Fonts.LARGE.drawString(width / 2, yText, String.format("Percent: %f", getScorePercent()), Color.white);
+		yText += Fonts.LARGE.getLineHeight() + .02f*height;
+		Fonts.LARGE.drawString(width / 2, yText, String.format("Perfects: %d", hitPerfect), Color.white);
+		yText += Fonts.LARGE.getLineHeight() + .005f*height;
+		Fonts.LARGE.drawString(width / 2, yText, String.format("Goods: %d", hitGood), Color.white);
+		yText += Fonts.LARGE.getLineHeight() + .005f*height;
+		Fonts.LARGE.drawString(width / 2, yText, String.format("Okays: %d", hitOkay), Color.white);
+		yText += Fonts.LARGE.getLineHeight() + .005f*height;
+		Fonts.LARGE.drawString(width / 2, yText, String.format("Misses: %d", hitMiss), Color.white);
+		yText += Fonts.LARGE.getLineHeight() + .01f*height;
+		Fonts.LARGE.drawString(width / 2, yText, String.format("Best Combo: %d", comboMax), Color.white);
 	}
 }
