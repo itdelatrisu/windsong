@@ -1,19 +1,11 @@
 package itdelatrisu.potato;
 
+import itdelatrisu.potato.map.HitObject;
+
 import java.util.ArrayList;
 
 public class ScoreData {
-	
-	private class MapObject {
-		private int pos;
-		private int timeLeft;
 		
-		public MapObject(int pos, int timeLeft) {
-			this.pos = pos;
-			this.timeLeft = timeLeft;
-		}
-	}
-	
 	// TODO: finalize these numbers
 	private static final int PERFECT_TIME = 50;
 	private static final int GOOD_TIME = 150;
@@ -27,27 +19,26 @@ public class ScoreData {
 	public static final int HIT_OBJECT_FADEIN_TIME = 750;
 	
 	private int score;
-	private ArrayList<MapObject> toHit;
+	private ArrayList<HitObject> toHit;
 	
 	public ScoreData() {
 		score = 0;
-		toHit = new ArrayList<MapObject>();
+		toHit = new ArrayList<HitObject>();
 	}
 	
 	public int getScore() {
 		return score;
 	}
 	
-	public void sendMapObject(int pos, int timeLeft) {
-		MapObject m = new MapObject(pos, timeLeft);
-		toHit.add(m);
+	public void sendMapObject(HitObject h) {
+		toHit.add(h);
 	}
 	
-	public int sendHit(int pos) {
-		for (MapObject m : toHit) {
-			if (m.pos == pos) {
+	public int sendHit(int pos, int time) {
+		for (HitObject h : toHit) {
+			if (h.getPosition() == pos) {
 				// TODO: animation graphic magic stuff
-				int t = Math.abs(m.timeLeft);
+				int t = Math.abs(h.getTime() - time);
 				int points;
 				if (t < PERFECT_TIME)
 					points = PERFECT_SCORE;
@@ -59,7 +50,7 @@ public class ScoreData {
 					points = MISS;
 
 				score += points;
-				toHit.remove(m);
+				toHit.remove(h);
 				return score;
 			}
 		}
@@ -67,14 +58,13 @@ public class ScoreData {
 		return MISS;
 	}
 
-	public void update(int delta) {
-		ArrayList<MapObject> toRemove = new ArrayList<MapObject>();
-		for (MapObject m : toHit) {
-			m.timeLeft -= delta;
-			if (m.timeLeft < -OKAY_TIME)
-				toRemove.add(m);
+	public void update(int delta, int time) {
+		ArrayList<HitObject> toRemove = new ArrayList<HitObject>();
+		for (HitObject h : toHit) {
+			if (h.getTime() - time < -OKAY_TIME)
+				toRemove.add(h);
 		}
-		for (MapObject r : toRemove) {
+		for (HitObject r : toRemove) {
 			toHit.remove(r);
 		}
 	}

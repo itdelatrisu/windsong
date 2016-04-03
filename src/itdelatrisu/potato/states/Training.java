@@ -14,6 +14,8 @@ import itdelatrisu.potato.App;
 import itdelatrisu.potato.ScoreData;
 import itdelatrisu.potato.Utils;
 import itdelatrisu.potato.audio.MusicController;
+import itdelatrisu.potato.audio.SoundController;
+import itdelatrisu.potato.audio.SoundEffect;
 import itdelatrisu.potato.leap.LeapController;
 import itdelatrisu.potato.leap.LeapListener;
 import itdelatrisu.potato.map.HitObject;
@@ -32,8 +34,9 @@ public class Training extends BasicGameState implements LeapListener {
 	private ScoreData scoreData;
 	private final int state;
 	
-	private static final float EVENT_INTERVAL = 2000;
-	private float timeToNext = EVENT_INTERVAL;
+	private static final int EVENT_INTERVAL = 2000;
+	private int timeToNext = EVENT_INTERVAL;
+	private int time = 0;
 	
 	public Training(int state) {
 		this.state = state;
@@ -76,17 +79,21 @@ public class Training extends BasicGameState implements LeapListener {
 			throws SlickException {
 		Gamepad gp = UI.getGamepad();
 		
+		time += delta;
 		timeToNext -= delta;
 		if (timeToNext < 0) {
-			timeToNext = EVENT_INTERVAL;
 			int pos = (int) (Math.random()*9);
-			gp.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME); // use the constant variable name
-			scoreData.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME);
+			gp.sendMapObject(pos, ScoreData.HIT_OBJECT_FADEIN_TIME);
+			HitObject hit = new HitObject(time + ScoreData.HIT_OBJECT_FADEIN_TIME, pos, HitObject.SOUND_CLAP);
+			scoreData.sendMapObject(hit);
+			
+			SoundController.playSound(SoundEffect.MENUCLICK);
+			timeToNext = EVENT_INTERVAL;
 		}
 		
 		UI.update(delta);
 		gp.update(delta);
-		scoreData.update(delta);
+		scoreData.update(delta, time);
 	}
 
 	@Override
@@ -142,7 +149,7 @@ public class Training extends BasicGameState implements LeapListener {
 	public void onHit(int pos) {
 		if (game.getCurrentStateID() != this.getID())
 			return;
-		scoreData.sendHit(pos);
+		scoreData.sendHit(pos, time);
 		UI.getGamepad().sendHit(pos, HitObject.SOUND_CLAP);
 	}
 }
