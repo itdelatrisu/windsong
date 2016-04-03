@@ -469,8 +469,39 @@ public class ScoreData {
 	 * Draws the scoring information to the screen.
 	 */
 	public void drawScoreScreen() {
-		float yText = height / 4;
+		float xUnit = width / 2f / 3f;
+		float yUnit = height / 14f;
 		
+		GameImage rankingImage;
+		int ranking = getGrade();
+		if (ranking == GRADE_S) rankingImage = GameImage.RANKING_S;
+		else if (ranking == GRADE_A) rankingImage = GameImage.RANKING_A;
+		else if (ranking == GRADE_B) rankingImage = GameImage.RANKING_B;
+		else if (ranking == GRADE_C) rankingImage = GameImage.RANKING_C;
+		else rankingImage = GameImage.RANKING_D;
+		
+		rankingImage.getImage()
+				.getScaledCopy(3f * yUnit / rankingImage.getImage().getHeight())
+				.draw(2f * xUnit, 2f * yUnit);
+//		Fonts.MEDIUM.drawString(xUnit, 2f * yUnit, "Ranking");
+		Fonts.LARGE.drawString(xUnit, 3 * yUnit, String.format("Accuracy\n%.2f%%", getScorePercent()));
+		Fonts.LARGE.drawString(xUnit, 5 * yUnit, String.format("Max Combo\n%dx", comboMax));
+		
+		GameImage.HIT_PERFECT.getImage()
+				.getScaledCopy(0.8f * yUnit / GameImage.HIT_PERFECT.getImage().getHeight())
+				.draw(xUnit, 7f * yUnit);
+		GameImage.HIT_GOOD.getImage()
+				.getScaledCopy(0.8f * yUnit / GameImage.HIT_GOOD.getImage().getHeight())
+				.draw(xUnit, 8f * yUnit);
+		GameImage.HIT_OK.getImage()
+				.getScaledCopy(0.8f * yUnit / GameImage.HIT_OK.getImage().getHeight())
+				.draw(xUnit, 9f * yUnit);
+		GameImage.HIT_MISS.getImage()
+				.getScaledCopy(0.8f * yUnit / GameImage.HIT_MISS.getImage().getHeight())
+				.draw(xUnit, 10f * yUnit);
+
+		
+		float yText = height / 4;
 		// TODO: this is just placeholder until we make better UI
 		Fonts.XLARGE.drawString(width / 2, yText, String.format("Grade: %d", getGrade()), Color.white);
 		yText += Fonts.XLARGE.getLineHeight() + .01f*height;
