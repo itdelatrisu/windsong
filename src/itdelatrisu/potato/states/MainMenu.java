@@ -24,7 +24,7 @@ import itdelatrisu.potato.map.PotatoMap;
 import itdelatrisu.potato.ui.Colors;
 import itdelatrisu.potato.ui.Fonts;
 import itdelatrisu.potato.ui.KineticScrolling;
-import itdelatrisu.potato.ui.StarStream;
+import itdelatrisu.potato.ui.PetalStream;
 import itdelatrisu.potato.ui.UI;
 import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
@@ -37,6 +37,9 @@ import itdelatrisu.potato.ui.animations.AnimationEquation;
 public class MainMenu extends BasicGameState {
 	/** Delay time, in milliseconds, for double-clicking focused result. */
 	private static final int FOCUS_DELAY = 250;
+
+	/** Number of petal types, for the petal streams. */
+	private static final int NUM_PETAL_STREAMS = 4;
 
 	/** Current focused (selected) result. */
 	private int focusIndex = -1;
@@ -56,8 +59,8 @@ public class MainMenu extends BasicGameState {
 	/** Background alpha level (for fade-in effect). */
 	private AnimatedValue bgAlpha = new AnimatedValue(1100, 0f, 0.9f, AnimationEquation.LINEAR);
 
-	/** The star stream. */
-	private StarStream starStream;
+	/** The petal stream. */
+	private PetalStream[] petalStreams;
 
 	// game-related variables
 	private GameContainer container;
@@ -87,8 +90,10 @@ public class MainMenu extends BasicGameState {
 		buttonOffset = buttonHeight * 1.1f;
 		maxResultsShown = (int) ((height - buttonBaseY - (height * 0.05f) + Fonts.LARGE.getLineHeight()) / buttonOffset);
 
-		// star stream
-		starStream = new StarStream(width, height);
+		// petal stream
+		petalStreams = new PetalStream[NUM_PETAL_STREAMS];
+		for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
+			petalStreams[i] = new PetalStream(i, width, height);
 	}
 
 	@Override
@@ -107,8 +112,9 @@ public class MainMenu extends BasicGameState {
 		bg.setAlpha(bgAlpha.getValue());
 		bg.draw();
 
-		// star stream
-		starStream.draw();
+		// petal stream
+		for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
+			petalStreams[i].draw();
 
 		// title
 		float textY = height * 0.03f;
@@ -152,7 +158,8 @@ public class MainMenu extends BasicGameState {
 		startResultPos.update(delta);
 		if (focusIndex != -1 && focusTimer < FOCUS_DELAY)
 			focusTimer += delta;
-		starStream.update(delta);
+		for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
+			petalStreams[i].update(delta);
 	}
 
 	@Override
@@ -164,7 +171,8 @@ public class MainMenu extends BasicGameState {
 		UI.enter();
 		startResultPos.setPosition(0);
 		focusIndex = -1;
-		starStream.clear();
+		for (int i = 0; i < NUM_PETAL_STREAMS; ++i)
+			petalStreams[i].clear();
 	}
 
 	@Override

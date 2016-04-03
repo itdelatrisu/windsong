@@ -13,41 +13,41 @@ import itdelatrisu.potato.ui.animations.AnimatedValue;
 import itdelatrisu.potato.ui.animations.AnimationEquation;
 
 /**
- * Horizontal star stream.
+ * Horizontal petal stream.
  */
-public class StarStream {
+public class PetalStream {
 	/** The container dimensions. */
 	private final int containerWidth, containerHeight;
 
-	/** The star image. */
-	private final Image starImg;
+	/** The petal image. */
+	private final Image petalImg;
 
-	/** The current list of stars. */
-	private final List<Star> stars;
+	/** The current list of petals. */
+	private final List<Petal> petals;
 
-	/** The maximum number of stars to draw at once. */
-	private static final int MAX_STARS = 20;
+	/** The maximum number of petals to draw at once. */
+	private static final int MAX_PETALS = 10;
 
 	/** Random number generator instance. */
 	private final Random random;
 
-	/** Contains data for a single star. */
-	private class Star {
-		/** The star animation progress. */
+	/** Contains data for a single petal. */
+	private class Petal {
+		/** The petal animation progress. */
 		private final AnimatedValue animatedValue;
 
-		/** The star properties. */
+		/** The petal properties. */
 		private final int distance, yOffset, angle;
 
 		/**
-		 * Creates a star with the given properties.
-		 * @param duration the time, in milliseconds, to show the star
-		 * @param distance the distance for the star to travel in {@code duration}
+		 * Creates a petal with the given properties.
+		 * @param duration the time, in milliseconds, to show the petal
+		 * @param distance the distance for the petal to travel in {@code duration}
 		 * @param yOffset the vertical offset from the center of the container
 		 * @param angle the rotation angle
 		 * @param eqn the animation equation to use
 		 */
-		public Star(int duration, int distance, int yOffset, int angle, AnimationEquation eqn) {
+		public Petal(int duration, int distance, int yOffset, int angle, AnimationEquation eqn) {
 			this.animatedValue = new AnimatedValue(duration, 0f, 1f, eqn);
 			this.distance = distance;
 			this.yOffset = yOffset;
@@ -55,14 +55,14 @@ public class StarStream {
 		}
 
 		/**
-		 * Draws the star.
+		 * Draws the petal.
 		 */
 		public void draw() {
 			float t = animatedValue.getValue();
-			starImg.setImageColor(1f, 1f, 1f, Math.min((1 - t) * 5f, 1f));
-			starImg.drawEmbedded(
-					containerWidth - (distance * t), ((containerHeight - starImg.getHeight()) / 2) + yOffset,
-					starImg.getWidth(), starImg.getHeight(), angle);
+			petalImg.setImageColor(1f, 1f, 1f, Math.min((1 - t) * 5f, 1f));
+			petalImg.drawEmbedded(
+					containerWidth - (distance * t), ((containerHeight - petalImg.getHeight()) / 2) + yOffset,
+					petalImg.getWidth(), petalImg.getHeight(), angle);
 		}
 
 		/**
@@ -74,65 +74,66 @@ public class StarStream {
 	}
 
 	/**
-	 * Initializes the star stream.
+	 * Initializes the petal stream.
+	 * @param imgId the petal type
 	 * @param width the container width
-	 * @param height the container height
+	 * @param height the container height 
 	 */
-	public StarStream(int width, int height) {
+	public PetalStream(int imgId, int width, int height) {
 		this.containerWidth = width;
 		this.containerHeight = height;
-		this.starImg = GameImage.STAR2.getImage().copy();
-		this.stars = new ArrayList<Star>();
+		this.petalImg = GameImage.valueOf(String.format("PETAL_%d", imgId)).getImage().copy();
+		this.petals = new ArrayList<Petal>();
 		this.random = new Random();
 	}
 
 	/**
-	 * Draws the star stream.
+	 * Draws the petal stream.
 	 */
 	public void draw() {
-		if (stars.isEmpty())
+		if (petals.isEmpty())
 			return;
 
-		starImg.startUse();
-		for (Star star : stars)
-			star.draw();
-		starImg.endUse();
+		petalImg.startUse();
+		for (Petal petal : petals)
+			petal.draw();
+		petalImg.endUse();
 	}
 
 	/**
-	 * Updates the stars in the stream by a delta interval.
+	 * Updates the petals in the stream by a delta interval.
 	 * @param delta the delta interval since the last call
 	 */
 	public void update(int delta) {
-		// update current stars
-		Iterator<Star> iter = stars.iterator();
+		// update current petals
+		Iterator<Petal> iter = petals.iterator();
 		while (iter.hasNext()) {
-			Star star = iter.next();
-			if (!star.update(delta))
+			Petal petal = iter.next();
+			if (!petal.update(delta))
 				iter.remove();
 		}
 
-		// create new stars
-		for (int i = stars.size(); i < MAX_STARS; i++) {
+		// create new petals
+		for (int i = petals.size(); i < MAX_PETALS; i++) {
 			if (Math.random() < ((i < 5) ? 0.25 : 0.66))
 				break;
 
-			// generate star properties
+			// generate petal properties
 			float distanceRatio = Utils.clamp((float) getGaussian(0.65, 0.25), 0.2f, 0.925f);
 			int distance = (int) (containerWidth * distanceRatio);
-			int duration = (int) (distanceRatio * getGaussian(1300, 300));
-			int yOffset = (int) getGaussian(0, containerHeight / 20);
-			int angle = (int) getGaussian(0, 22.5);
+			int duration = (int) (distanceRatio * getGaussian(2000, 600));
+			int yOffset = (int) getGaussian(0, containerHeight / 4);
+			int angle = (int) getGaussian(0, 45);
 			AnimationEquation eqn = random.nextBoolean() ? AnimationEquation.IN_OUT_QUAD : AnimationEquation.OUT_QUAD;
 
-			stars.add(new Star(duration, distance, angle, yOffset, eqn));
+			petals.add(new Petal(duration, distance, yOffset, angle, eqn));
 		}
 	}
 
 	/**
-	 * Clears the stars currently in the stream.
+	 * Clears the petals currently in the stream.
 	 */
-	public void clear() { stars.clear(); }
+	public void clear() { petals.clear(); }
 
 	/**
 	 * Returns the next pseudorandom, Gaussian ("normally") distributed {@code double} value

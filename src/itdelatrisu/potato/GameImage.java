@@ -22,12 +22,6 @@ public enum GameImage {
 			return img.getScaledCopy(w, h);
 		}
 	},
-	GAMEPAD_BG ("gamepad-bg", "png|jpg") {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy(w, h);
-		}
-	},
 	GAMEPAD_0 ("gamepad-0", "png") {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
@@ -194,12 +188,10 @@ public enum GameImage {
 	SCORE_X ("score-x", "png"),
 
 	// Non-Game Components
-	STAR2 ("blossom", "png", false, false) {
-		@Override
-		protected Image process_sub(Image img, int w, int h) {
-			return img.getScaledCopy((MENU_BUTTON_BG.getImage().getHeight() * 0.33f) / img.getHeight());
-		}
-	},
+	PETAL_0 ("petal-0", "png", false, false),
+	PETAL_1 ("petal-1", "png", false, false),
+	PETAL_2 ("petal-2", "png", false, false),
+	PETAL_3 ("petal-3", "png", false, false),
 	MUSIC_PLAY ("music-play", "png", false, false),
 	MUSIC_PAUSE ("music-pause", "png", false, false),
 	MUSIC_NEXT ("music-next", "png", false, false),
@@ -211,7 +203,6 @@ public enum GameImage {
 		}
 	},
 	MENU_BACK ("menu-back", "menu-back-%d", "png"),
-	MENU_BUTTON_BG ("menu-button-background", "png", false, false),
 	MENU_MUSICNOTE ("music-note", "png", false, false) {
 		@Override
 		protected Image process_sub(Image img, int w, int h) {
