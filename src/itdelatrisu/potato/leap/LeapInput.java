@@ -15,9 +15,9 @@ import itdelatrisu.potato.Utils;
  */
 public class LeapInput extends Listener {
 	private final double
-		X_MIN = -250.0, X_MAX = 250.0,
-		Z_MIN = -120.0, Z_MAX = 130.0;
-	private final double[] Y_HIT = { 100.0, 110.0, 120.0 };
+		X_LEFT = -80.0, X_RIGHT = 80.0,
+		Z_FAR = -40.0, Z_NEAR = 40.0;
+	private final double[] Y_HIT = { 105.0, 115.0, 130.0 };
 	private final double Y_TOP = 150.0;
 	private final long HIT_TIME = 150;
 	private final int GRID_SIZE = 3;
@@ -68,8 +68,8 @@ public class LeapInput extends Listener {
 				continue;
 			}
 
-			int px = Utils.clamp((int) (1.0 * GRID_SIZE * (x - X_MIN) / (X_MAX - X_MIN)), 0, GRID_SIZE - 1);
-			int pz = Utils.clamp((int) (1.0 * GRID_SIZE * (z - Z_MIN) / (Z_MAX - Z_MIN)), 0, GRID_SIZE - 1);
+			int px = (x < X_LEFT) ? 0 : ((x < X_RIGHT) ? 1 : 2);
+			int pz = (z < Z_FAR) ? 0 : ((z < Z_NEAR) ? 1 : 2);
 			Point hit = new Point(pz, px);
 			if (y > Y_HIT[Math.abs(pz - 1) + Math.abs(px - 1)]) {
 				if (hitTimeLeft == -1) hitTimeLeft = System.currentTimeMillis();
